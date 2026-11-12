@@ -1,0 +1,18 @@
+name: Feature or usability suggestion
+description: Explain a workflow that could be simpler or more reliable.
+title: "[Suggestion] "
+body:
+  - type: textarea
+    id: workflow
+    attributes:
+      label: What are you trying to do?
+      description: Describe the user task and where the current app gets in the way.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed improvement
+      description: A small concrete example helps. Mention alternatives if useful.
+    validations:
+      required: true

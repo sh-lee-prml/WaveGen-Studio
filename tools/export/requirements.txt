@@ -1,0 +1,18 @@
+# Python 3.12 build-time environment. No Python is needed to run Studio.
+# Install torch/torchaudio from the official CUDA 12.8 index first (README).
+numpy==1.26.4
+onnx==1.23.2
+onnxscript==0.7.2
+onnx-ir==1.1.0
+ml_dtypes==0.5.4
+einops==0.8.2
+x-transformers==2.31.18
+torchdiffeq==0.2.5
+safetensors==0.8.0
+omegaconf==2.4.0
+soundfile==0.14.0
+rjieba==0.2.2
+pypinyin==0.55.0
+huggingface-hub==0.36.2
+PyYAML==6.0.3
+scipy==1.17.1

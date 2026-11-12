@@ -1,0 +1,83 @@
+// node tests/test_result_workspace.cjs
+// Actual app behavior with deterministic DOM/media/API mocks; no browser/GPU.
+'use strict';
+const fs=require('node:fs'),path=require('node:path');
+let setup=fs.readFileSync(path.join(__dirname,'test_frontend_ux.cjs'),'utf8').split('async function main() {')[0];
+setup=setup.replace('vm.createContext(sandbox);',String.raw`
+const scrollCalls=[];let mediaPlayCount=0;
+Element.prototype.scrollIntoView=function(options){scrollCalls.push({id:this.id,options});};
+const oldMediaPlay=Element.prototype.play;Element.prototype.play=function(){mediaPlayCount++;return oldMediaPlay.call(this);};
+vm.createContext(sandbox);`);
+const tests=String.raw`
+(async()=>{
+  await flush();const t=sandbox.__test,tr=sandbox.window.StudioI18n.t;
+  const ready=()=>{status={...status,state:'ready',request_id:'',can_cancel:false,cancel_requested:false,enhancement:{available:true,loaded:true}};t.state.status=status;t.state.connected=true;};
+  ready();t.state.history=[];history=[];t.state.activeResultId='';t.renderResults();
+  assert.equal(elements.get('show-output').hidden,true);assert.equal(elements.get('output-status').textContent,'');assert.equal(scrollCalls.length,0);assert.equal(mediaPlayCount,0);
+  passed('Empty output has no misleading ready status, automatic scrolling or autoplay');
+  t.applyDraft({text:'This is a visible result test.',voice_id:voice.id,model_id:'flash',seed:23,speed:1,split_long_text:true,enhance_output:false});
+  assert(elements.get('settings-summary').textContent.includes(tr('output.splitOn')));
+  t.applyDraft({...t.currentDraft(),split_long_text:false,enhance_output:true});
+  assert(elements.get('settings-summary').textContent.includes(tr('composer.splitOff')));assert(elements.get('settings-summary').textContent.includes(tr('output.enhanceOn')));
+  assert.equal(t.requestSettings().enhance_output,true);assert.equal(t.requestSettings().split_long_text,false);
+  t.applyDraft({...t.currentDraft(),split_long_text:true,enhance_output:false});
+  passed('Collapsed settings expose long-text/enhancement indicators while preserving exact request settings');
+  await t.loadPlan(t.planKey(),t.state.planRevision);elements.get('generate-button').focus();
+  const focusBefore=document.activeElement,requestJob=t.generate();await flush();
+  assert.equal(elements.get('current-output').getAttribute('aria-busy'),undefined);assert.equal(elements.get('show-output').hidden,false);assert.equal(elements.get('output-status').textContent,tr('generate.working'));
+  assert(elements.has('generation-progress'));assert.equal(elements.get('cancel-row').hidden,false);assert.equal(document.activeElement,focusBefore);assert.equal(scrollCalls.length,0);assert.equal(mediaPlayCount,0);
+  status={...status,chunk_count:3,chunk_index:1,chunk_text:'A section in progress.'};await t.refreshStatus();
+  assert.equal(elements.get('generation-progress').textContent,tr('generate.progress',{done:1,total:3}));assert.equal(elements.get('generation-chunk').textContent,'A section in progress.');
+  passed('Generation progress and cancellation remain visible in the output workspace without moving focus or the page');
+  t.openVoiceEditor(voice);elements.get('voice-name').focus();const editingFocus=document.activeElement;
+  const first={id:'output-first',voice_id:voice.id,voice_name:voice.name,text:'This is a visible result test.',model_id:'flash',seed:23,duration_seconds:3.5,generation_seconds:.2,audio_url:'/api/audio/outputs/output-first',created_at:new Date().toISOString(),request_id:generatedRequests.at(-1).request_id};
+  history=[first];ready();generationResolve(first);await requestJob;
+  assert.equal(elements.get('output-status').textContent,tr('output.ready'));assert.equal(elements.get('current-output').getAttribute('aria-busy'),undefined);assert.equal(document.activeElement,editingFocus);assert.equal(scrollCalls.length,0);assert.equal(mediaPlayCount,0);assert(t.state.modal);
+  t.closeVoiceEditor(true);
+  passed('A finished request exposes its player while preserving an unrelated open voice editor and never autoplaying');
+  const player=elements.get('generated-player');player.currentTime=1.25;await player.play();elements.get('result-details').open=true;
+  const playbackCount=mediaPlayCount;const focusPlayer=elements.get('reuse-result');focusPlayer.focus();
+  for(const locale of ['en','ko','zh','ja']){
+    sandbox.window.StudioI18n.setLocale(locale);assert.equal(elements.get('generated-player'),player);assert.equal(player.currentTime,1.25);assert.equal(player.paused,false);assert.equal(elements.get('result-details').open,true);assert.equal(document.activeElement,focusPlayer);
+    assert.equal(elements.get('result-details-label').textContent,tr('output.details'));assert.equal(elements.get('output-status').textContent,tr('output.ready'));
+  }
+  await t.refreshHistory(first.id);assert.equal(elements.get('generated-player'),player);assert.equal(mediaPlayCount,playbackCount);assert.equal(scrollCalls.length,0);
+  passed('Locale changes and history refresh preserve the same audio node, playback position, disclosure state and keyboard focus');
+  elements.get('show-output').click();assert.equal(document.activeElement,elements.get('current-output'));assert.equal(scrollCalls.length,1);assert.equal(scrollCalls[0].id,'current-output');assert.equal(mediaPlayCount,playbackCount);
+  passed('View audio provides one explicit keyboard-accessible jump without starting playback');
+  elements.get('speech-edit-result').click();assert.equal(editedOpened.id,first.id);assert.equal(generatedRequests.length,1);
+  assert(elements.get('result-player').innerHTML.includes('href="http://localhost:7887/api/audio/outputs/output-first"'));
+  assert.equal(elements.get('result-download').getAttribute('aria-label'),tr('result.downloadAria'));
+  passed('The compact player retains download accessibility and opens the exact recording in Speech Edit');
+  const enhanced={...first,id:'output-enhanced',enhanced:true,original_audio_url:first.audio_url,source_id:first.id,audio_url:'/api/audio/outputs/output-enhanced'};
+  history=[enhanced,first];t.state.history=history.slice();t.state.activeResultId=enhanced.id;t.renderResults();
+  const comparison=elements.get('result-enhancement-comparison'),before=elements.get('result-before-player'),after=elements.get('result-after-player'),main=elements.get('generated-player');
+  assert.equal(comparison.hidden,false);assert(!comparison.open);assert.equal(new URL(before.src).pathname,first.audio_url);assert.equal(new URL(after.src).pathname,enhanced.audio_url);
+  await main.play();comparison.open=true;comparison.listeners.toggle[0]();assert.equal(main.paused,true);await before.play();assert.equal(main.paused,true);await after.play();assert.equal(before.paused,true);
+  comparison.open=false;comparison.listeners.toggle[0]();assert.equal(before.paused,true);assert.equal(after.paused,true);
+  passed('Before/after comparison is an explicit collapsed disclosure; hidden comparison audio stops and players never overlap');
+  const activeNode=elements.get('generated-player');t.state.historyQuery='unmatched text';t.renderHistory();assert.equal(elements.get('generated-player'),activeNode);assert.equal(t.state.activeResultId,enhanced.id);t.state.historyQuery='';
+  passed('History browsing/filtering stays separate from the active recording and does not replace its player');
+  const queuedOldToggle=comparison.listeners.toggle[0];
+  ready();await t.loadPlan(t.planKey(),t.state.planRevision);const cancelJob=t.generate();await flush();
+  comparison.isConnected=false;comparison.open=true;assert(!elements.get('generated-player'));assert.doesNotThrow(queuedOldToggle);
+  assert.equal(elements.get('current-output').getAttribute('aria-busy'),undefined);assert(elements.get('result-player').innerHTML.includes('role="status" aria-live="polite"'));
+  await t.cancelGeneration();
+  ready();generationResolve({cancelled:true,request_id:generatedRequests.at(-1).request_id});const playsBeforeCancel=mediaPlayCount;await cancelJob;
+  assert.equal(t.state.activeResultId,enhanced.id);assert.equal(elements.get('output-status').textContent,tr('output.ready'));assert.equal(elements.get('current-output').getAttribute('aria-busy'),undefined);assert.equal(scrollCalls.length,1);assert.equal(mediaPlayCount,playsBeforeCancel);
+  passed('Cancellation restores the previous available recording without an automatic jump or playback');
+  const replacementPlayer=elements.get('generated-player');replacementPlayer.paused=false;assert.doesNotThrow(queuedOldToggle);assert.equal(replacementPlayer.paused,false);
+  comparison.open=false;assert.doesNotThrow(queuedOldToggle);assert.equal(replacementPlayer.paused,false);
+  passed('A queued toggle from a detached comparison neither throws during generation nor pauses a replacement player; live progress has no busy ancestor');
+  assert.equal((html.match(/id="result-player"/g)||[]).length,1);assert.equal((html.match(/id="current-output"/g)||[]).length,1);
+  const outputStart=html.indexOf('id="current-output"'),historyStart=html.indexOf('class="results-section history-section"'),generateStart=html.indexOf('id="generate-button"');
+  assert(generateStart<outputStart&&outputStart<historyStart);assert(!html.slice(outputStart,historyStart).includes('id="history-list"'));
+  const advanced=html.slice(html.indexOf('id="advanced-options"'),html.indexOf('id="draft-settings"'));assert(advanced.includes('id="split-long-text"'));assert(advanced.includes('id="enhance-output"'));assert(/<details[^>]*id="advanced-options"[^>]*>/.test(html)&&!/<details[^>]*id="advanced-options"[^>]*\sopen/.test(html));
+  const css=fs.readFileSync(path.join(webRoot,'style.css'),'utf8');assert(css.includes('@media(min-width:1280px)'));assert(css.includes('minmax(330px,.9fr)'));assert(css.includes('.current-output{position:sticky'));assert(css.includes('.generation-workspace{display:grid;grid-template-columns:minmax(0,1fr)'));
+  passed('Source structure has a single output before separate history, optional controls collapsed, wide two-column and narrow single-column layouts');
+  const names=['app.js','index.html','style.css','i18n-ux-history.js'];
+  const report={created_at:new Date().toISOString(),passed:checks.length,failed:0,checks,browser_used:false,gpu_used:false,scope:'Production app with deterministic DOM/media/API mocks. Actual 1280x720/390px placement and native controls require separate browser review.',sources:Object.fromEntries(names.map(name=>[name,crypto.createHash('sha256').update(fs.readFileSync(path.join(webRoot,name))).digest('hex')])),harness_sha256:crypto.createHash('sha256').update(fs.readFileSync(path.join(__dirname,'test_frontend_ux.cjs'))).digest('hex')};
+  const destination=path.join(__dirname,'result_workspace_validation.json');fs.writeFileSync(destination,JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify({report:destination,passed:checks.length,failed:0}));
+})().catch(error=>{console.error(error.stack);process.exitCode=1;});
+`;
+new Function('require','__dirname',setup+tests)(require,__dirname);

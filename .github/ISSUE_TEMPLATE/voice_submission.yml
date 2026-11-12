@@ -1,0 +1,66 @@
+name: Voice contribution / 목소리 제안
+description: Propose a reference recording for review before inclusion.
+title: "[Voice] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you! Read the [voice guide](https://github.com/sh-lee-prml/WaveGen-Studio/blob/main/docs/VOICE_CONTRIBUTIONS.md) first. Issues and attachments are public. Do not upload private evidence or signed personal documents. Inclusion follows review and is not automatic.
+  - type: input
+    id: display_name
+    attributes:
+      label: Suggested display name
+      description: A short name or fictional alias; no false identity or endorsement.
+    validations:
+      required: true
+  - type: textarea
+    id: audio
+    attributes:
+      label: Audio sample
+      description: Attach or link a publicly shareable WAV, preferably 3–10 seconds and under 30 seconds, one English speaker.
+    validations:
+      required: true
+  - type: textarea
+    id: reference_text
+    attributes:
+      label: Exact Reference Text
+      description: Paste every spoken word in the recording, in English.
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Source and changes
+      description: Who recorded it, original URL if applicable, and any trimming, resampling, gain, or enhancement.
+    validations:
+      required: true
+  - type: textarea
+    id: license
+    attributes:
+      label: License and attribution
+      description: Exact license or permission grant, source URL, required credit, and permission to redistribute and process the recording.
+    validations:
+      required: true
+  - type: textarea
+    id: speaker_permission
+    attributes:
+      label: Speaker permission
+      description: Are you the speaker? Otherwise describe permission to share this recording as a reusable TTS reference and create synthesized speech. Do not attach private identity or consent documents.
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Optional notes or artwork
+      description: Include separate artwork provenance/license if proposing an image.
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Before submitting
+      options:
+        - label: I can publicly share this audio and have described its license and the speaker's applicable permission.
+          required: true
+        - label: The Reference Text matches the supplied audio, and this submission does not falsely claim another person's identity or endorsement.
+          required: true
+        - label: I understand that inclusion requires review and WaveGen model terms remain separate from the recording license.
+          required: true

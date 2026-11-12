@@ -1,0 +1,38 @@
+name: Bug report
+description: Report an application, installation, or audio-processing problem.
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: Do not attach your whole data folder, private audio, tokens, or unredacted private paths.
+  - type: input
+    id: version
+    attributes:
+      label: Studio version
+      placeholder: 0.1.0-beta.1
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Windows, GPU, driver, and model
+      description: Include Windows version, GPU/VRAM, NVIDIA driver, and Flash/V-Spec/RE-USE selection. State whether this is a release or local build.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: What did you do, what happened, and what did you expect? For an audio issue, describe the audible problem separately from transcript accuracy.
+    validations:
+      required: true
+  - type: textarea
+    id: error
+    attributes:
+      label: Error or shareable example
+      description: Visible error, relevant log excerpt, screenshot, or short audio you have permission to share. Remove private information.
+  - type: textarea
+    id: recovery
+    attributes:
+      label: Recovery or workaround
+      description: Does retrying, restarting, switching models, or disabling enhancement change it?

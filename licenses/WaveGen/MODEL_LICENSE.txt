@@ -1,0 +1,12 @@
+WaveGen model checkpoints
+
+Copyright (c) 2026 Sang-Hoon Lee.
+
+The model checkpoints in this repository are licensed under the
+Creative Commons Attribution-NonCommercial 4.0 International license
+(CC BY-NC 4.0).
+
+License summary: https://creativecommons.org/licenses/by-nc/4.0/
+Full legal terms: https://creativecommons.org/licenses/by-nc/4.0/legalcode
+
+Source-code licenses are separate; see the WaveGen source repository.

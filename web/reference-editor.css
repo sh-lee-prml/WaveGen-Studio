@@ -1,0 +1,25 @@
+.reference-editor { margin: 14px 0; padding: 16px; border: 1px solid #d4e3dc; border-radius: 14px; background: #f8fbf8; }
+.reference-editor[hidden], .reference-quality[hidden], .reference-transcript-confirm[hidden], #reference-selection-player[hidden] { display: none; }
+.reference-editor-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px; }
+.reference-editor h3 { font-size: 15px; margin: 0; color: #253c34; }
+.reference-editor-heading > span, .reference-range-summary { font-size: 12px; color: #50645c; font-variant-numeric: tabular-nums; }
+.reference-guide { font-size: 13px; line-height: 1.65; color: #365b50; margin: 10px 0; }
+#reference-waveform { display: block; width: 100%; height: 108px; border: 1px solid #cbdcd3; border-radius: 8px; cursor: crosshair; touch-action: none; }
+#reference-waveform[aria-disabled="true"] { cursor: wait; opacity: .65; }
+.reference-editor-help { font-size: 12px; line-height: 1.6; color: #53685e; margin: 7px 0; }
+.reference-range-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+.reference-range-fields label { display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #304c40; }
+.reference-range-fields input { width: 100%; min-width: 0; border: 1px solid #cbd9d0; border-radius: 8px; padding: 9px 10px; background: white; font: inherit; font-size: 14px; }
+.reference-range-fields input:focus-visible { outline: 2px solid #00866f; outline-offset: 2px; }
+.reference-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 9px 14px; margin: 12px 0; }
+.reference-toolbar .button { padding: 8px 12px; font-size: 12px; min-height: 36px; }
+.reference-toolbar .text-button { font-size: 12px; min-height: 36px; }
+#reference-selection-player { width: 100%; height: 40px; margin-bottom: 10px; }
+.reference-normalize-option, .reference-transcript-confirm { display: flex; align-items: flex-start; gap: 9px; font-size: 13px; line-height: 1.55; color: #314d41; }
+.reference-normalize-option input, .reference-transcript-confirm input { margin-top: 4px; accent-color: #007b64; flex-shrink: 0; }
+.reference-quality { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; line-height: 1.5; color: #284d3e; padding: 10px; background: #e9f3ed; border-radius: 8px; margin: 10px 0; }
+.reference-quality p { flex-basis: 100%; color: #785123; margin: 3px 0 0; }
+.reference-transcript-confirm { padding: 12px; background: #fff6dd; border: 1px solid #ecdba4; border-radius: 10px; margin: 12px 0; }
+.reference-edit-entry { margin-top: 12px; }
+.reference-preview-heading { font-size: 12px; color: #3b6253; font-weight: 600; margin-bottom: 8px; }
+@media (max-width: 480px) { .reference-editor { padding: 12px; } .reference-toolbar { gap: 7px 12px; } .reference-range-fields { gap: 8px; } }

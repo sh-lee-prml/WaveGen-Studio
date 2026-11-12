@@ -1,0 +1,20 @@
+{
+  "frontend_precision": "BF16",
+  "sample_rate": 24000,
+  "n_fft": 1920,
+  "hop_length": 480,
+  "n_mels": 80,
+  "window": "periodic Hann FP32",
+  "spectrogram": "FP32 complex FFT, unnormalized magnitude, reflect center",
+  "magnitude_before_matmul": "BF16 round-to-nearest-even stored FP32",
+  "filter_before_matmul": "BF16 round-to-nearest-even stored FP32",
+  "matmul_accumulation": "FP32",
+  "matmul_output": "BF16 round-to-nearest-even",
+  "clamp_min": 1e-05,
+  "clamp_output": "BF16 round-to-nearest-even",
+  "log_output": "FP32 (CUDA autocast promotes log; do not round log to BF16)",
+  "returned_storage": "FP32",
+  "frame_layout": "[1,frames,80], drop final centered STFT frame",
+  "official_cuda_reduced_precision_reduction": true,
+  "native_accumulation_note": "FP32 CPU accumulation matches CUDA when reduced-precision reduction is disabled; official default CUDA partial reductions can differ"
+}

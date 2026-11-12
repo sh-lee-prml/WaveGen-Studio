@@ -1,0 +1,116 @@
+{
+  "version": "0.1.0-beta.1",
+  "voices": [
+    {
+      "id": "4af1c737c9bb5971ae6989cff1391801",
+      "name": "Mira",
+      "description": "US English · SLT",
+      "reference_text": "I'm playing a single hand in what looks like a losing game.",
+      "audio_file": "audio/mira.wav",
+      "avatar_file": "avatars/mira.png",
+      "source": {
+        "dataset": "CMU ARCTIC",
+        "title": "CMU US SLT ARCTIC",
+        "speaker": "SLT",
+        "utterance": "arctic_a0010",
+        "url": "http://festvox.org/cmu_arctic/dbs_slt.html",
+        "recording_url": "http://festvox.org/cmu_arctic/cmu_arctic/cmu_us_slt_arctic/wav/arctic_a0010.wav",
+        "verified_at": "2026-11-12",
+        "recording_sha256": "8a2e6c72b933f737ca476eabcbee309f312ff7db4d58138db4f13648c1f426a6",
+        "reference_sha256": "408f1ae0d7c9394968e3afb9845d5db4289c453489eb42c187f0f74689abf002",
+        "attribution": "CMU ARCTIC databases for speech synthesis, Carnegie Mellon University; John Kominek and Alan W Black; source voice SLT.",
+        "notes": "Converted the original 16 kHz recording to 24 kHz; no other audio changes.",
+        "modifications": "Resampled official mono PCM16 16 kHz recording to 24 kHz with scipy.signal.resample_poly(up=3, down=2); encoded PCM16. No trim, denoising, gain adjustment, speech alteration, or silence padding.",
+        "fictional_character": true,
+        "avatar_origin": "Mira, Rowan, and Kai are fictional selection aliases. Character artwork is not a depiction of the recording speaker and does not imply endorsement.",
+        "avatar_sha256": "707b8193d7a9220fbb87b150e94e00357a73d83f637daf1d5ac5984b900111e7"
+      },
+      "license": {
+        "id": "LicenseRef-CMU-ARCTIC",
+        "spdx": "LicenseRef-CMU-ARCTIC",
+        "title": "CMU ARCTIC permissive license (not CC0)",
+        "name": "CMU ARCTIC permissive license (not CC0)",
+        "url": "http://festvox.org/cmu_arctic/cmu_arctic/cmu_us_slt_arctic/COPYING",
+        "notice": "\nThis voice is free for use for any purpose (commercial or otherwise)\nsubject to the pretty light restrictions detailed below.\n\n############################################################################\n###                                                                       ##\n###                     Carnegie Mellon University                        ##\n###                         Copyright (c) 2003                            ##\n###                        All Rights Reserved.                           ##\n###                                                                       ##\n###  Permission to use, copy, modify,  and licence this software and its  ##\n###  documentation for any purpose, is hereby granted without fee,        ##\n###  subject to the following conditions:                                 ##\n###   1. The code must retain the above copyright notice, this list of    ##\n###      conditions and the following disclaimer.                         ##\n###   2. Any modifications must be clearly marked as such.                ##\n###   3. Original authors' names are not deleted.                         ##\n###                                                                       ##\n###  THE AUTHORS OF THIS WORK DISCLAIM ALL WARRANTIES WITH REGARD TO      ##\n###  THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY   ##\n###  AND FITNESS, IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY         ##\n###  SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES            ##\n###  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN   ##\n###  AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,          ##\n###  ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF       ##\n###  THIS SOFTWARE.                                                       ##\n###                                                                       ##\n############################################################################\n###                                                                       ##\n###  See http://www.festvox.org/cmu_arctic/ for more details              ##\n###                                                                       ##\n############################################################################\n\n",
+        "attribution": "CMU ARCTIC databases for speech synthesis, Carnegie Mellon University; John Kominek and Alan W Black; source voice SLT.",
+        "attribution_required": true,
+        "commercial_use": true,
+        "redistribution": true
+      }
+    },
+    {
+      "id": "44c397d24e9559ec97a8bf4824130405",
+      "name": "Rowan",
+      "description": "US English · BDL",
+      "reference_text": "I'm playing a single hand in what looks like a losing game.",
+      "audio_file": "audio/rowan.wav",
+      "avatar_file": "avatars/rowan.png",
+      "source": {
+        "dataset": "CMU ARCTIC",
+        "title": "CMU US BDL ARCTIC",
+        "speaker": "BDL",
+        "utterance": "arctic_a0010",
+        "url": "http://festvox.org/cmu_arctic/dbs_bdl.html",
+        "recording_url": "http://festvox.org/cmu_arctic/cmu_arctic/cmu_us_bdl_arctic/wav/arctic_a0010.wav",
+        "verified_at": "2026-11-12",
+        "recording_sha256": "fe455dac4a03eb16c698793be30e6172080d3cace7d23a709d38a92686d3da19",
+        "reference_sha256": "3fca8cd3a34f5f0b9dbc9d46a91466424fdafbfde6bfdfcd263f3e65f6f2bccf",
+        "attribution": "CMU ARCTIC databases for speech synthesis, Carnegie Mellon University; John Kominek and Alan W Black; source voice BDL.",
+        "notes": "Converted the original 16 kHz recording to 24 kHz; no other audio changes.",
+        "modifications": "Resampled official mono PCM16 16 kHz recording to 24 kHz with scipy.signal.resample_poly(up=3, down=2); encoded PCM16. No trim, denoising, gain adjustment, speech alteration, or silence padding.",
+        "fictional_character": true,
+        "avatar_origin": "Mira, Rowan, and Kai are fictional selection aliases. Character artwork is not a depiction of the recording speaker and does not imply endorsement.",
+        "avatar_sha256": "2240514f1725009ec7cb57c88f75f88a02673cbb5f1e10ece299b3b92c369698"
+      },
+      "license": {
+        "id": "LicenseRef-CMU-ARCTIC",
+        "spdx": "LicenseRef-CMU-ARCTIC",
+        "title": "CMU ARCTIC permissive license (not CC0)",
+        "name": "CMU ARCTIC permissive license (not CC0)",
+        "url": "http://festvox.org/cmu_arctic/cmu_arctic/cmu_us_bdl_arctic/COPYING",
+        "notice": "\nThis voice is free for use for any purpose (commercial or otherwise)\nsubject to the pretty light restrictions detailed below.\n\n############################################################################\n###                                                                       ##\n###                     Carnegie Mellon University                        ##\n###                         Copyright (c) 2003                            ##\n###                        All Rights Reserved.                           ##\n###                                                                       ##\n###  Permission to use, copy, modify,  and licence this software and its  ##\n###  documentation for any purpose, is hereby granted without fee,        ##\n###  subject to the following conditions:                                 ##\n###   1. The code must retain the above copyright notice, this list of    ##\n###      conditions and the following disclaimer.                         ##\n###   2. Any modifications must be clearly marked as such.                ##\n###   3. Original authors' names are not deleted.                         ##\n###                                                                       ##\n###  THE AUTHORS OF THIS WORK DISCLAIM ALL WARRANTIES WITH REGARD TO      ##\n###  THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY   ##\n###  AND FITNESS, IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY         ##\n###  SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES            ##\n###  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN   ##\n###  AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,          ##\n###  ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF       ##\n###  THIS SOFTWARE.                                                       ##\n###                                                                       ##\n############################################################################\n###                                                                       ##\n###  See http://www.festvox.org/cmu_arctic/ for more details              ##\n###                                                                       ##\n############################################################################\n\n",
+        "attribution": "CMU ARCTIC databases for speech synthesis, Carnegie Mellon University; John Kominek and Alan W Black; source voice BDL.",
+        "attribution_required": true,
+        "commercial_use": true,
+        "redistribution": true
+      }
+    },
+    {
+      "id": "ec2f254340bf592583337a2c56de4eff",
+      "name": "Kai",
+      "description": "US English · RMS",
+      "reference_text": "I'm playing a single hand in what looks like a losing game.",
+      "audio_file": "audio/kai.wav",
+      "avatar_file": "avatars/kai.png",
+      "source": {
+        "dataset": "CMU ARCTIC",
+        "title": "CMU US RMS ARCTIC",
+        "speaker": "RMS",
+        "utterance": "arctic_a0010",
+        "url": "http://festvox.org/cmu_arctic/dbs_rms.html",
+        "recording_url": "http://festvox.org/cmu_arctic/cmu_arctic/cmu_us_rms_arctic/wav/arctic_a0010.wav",
+        "verified_at": "2026-11-12",
+        "recording_sha256": "fc4ceecf6c15523437f33d3aaa977864920b44a55d7c4c6da9f93b6abc30746c",
+        "reference_sha256": "6d3c969c29bec60c15ae201e1e2156c7288705c4c36a9b5c4cd20973bac2c7e1",
+        "attribution": "CMU ARCTIC databases for speech synthesis, Carnegie Mellon University; John Kominek and Alan W Black; source voice RMS.",
+        "notes": "Converted the original 16 kHz recording to 24 kHz; no other audio changes.",
+        "modifications": "Resampled official mono PCM16 16 kHz recording to 24 kHz with scipy.signal.resample_poly(up=3, down=2); encoded PCM16. No trim, denoising, gain adjustment, speech alteration, or silence padding.",
+        "fictional_character": true,
+        "avatar_origin": "Mira, Rowan, and Kai are fictional selection aliases. Character artwork is not a depiction of the recording speaker and does not imply endorsement.",
+        "avatar_sha256": "fc0d9d1eb7ebb10031dcbfd70bab58f9f3a71002339fc22ac8629933d58b9d83"
+      },
+      "license": {
+        "id": "LicenseRef-CMU-ARCTIC",
+        "spdx": "LicenseRef-CMU-ARCTIC",
+        "title": "CMU ARCTIC permissive license (not CC0)",
+        "name": "CMU ARCTIC permissive license (not CC0)",
+        "url": "http://festvox.org/cmu_arctic/cmu_arctic/cmu_us_rms_arctic/COPYING",
+        "notice": "\nThis voice is free for use for any purpose (commercial or otherwise)\nsubject to the pretty light restrictions detailed below.\n\n############################################################################\n###                                                                       ##\n###                     Carnegie Mellon University                        ##\n###                         Copyright (c) 2004                            ##\n###                        All Rights Reserved.                           ##\n###                                                                       ##\n###  Permission to use, copy, modify,  and licence this software and its  ##\n###  documentation for any purpose, is hereby granted without fee,        ##\n###  subject to the following conditions:                                 ##\n###   1. The code must retain the above copyright notice, this list of    ##\n###      conditions and the following disclaimer.                         ##\n###   2. Any modifications must be clearly marked as such.                ##\n###   3. Original authors' names are not deleted.                         ##\n###                                                                       ##\n###  THE AUTHORS OF THIS WORK DISCLAIM ALL WARRANTIES WITH REGARD TO      ##\n###  THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY   ##\n###  AND FITNESS, IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY         ##\n###  SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES            ##\n###  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN   ##\n###  AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,          ##\n###  ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF       ##\n###  THIS SOFTWARE.                                                       ##\n###                                                                       ##\n############################################################################\n###                                                                       ##\n###  See http://www.festvox.org/cmu_arctic/ for more details              ##\n###                                                                       ##\n############################################################################\n\n",
+        "attribution": "CMU ARCTIC databases for speech synthesis, Carnegie Mellon University; John Kominek and Alan W Black; source voice RMS.",
+        "attribution_required": true,
+        "commercial_use": true,
+        "redistribution": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+# Third-party notices
+
+Original WaveGen Studio contributions are Copyright (c) 2026 WaveGen Studio contributors and are licensed under [MIT](LICENSE). This grant does not replace the terms of the following components. See [the license map](docs/LICENSING.md) and the full notices supplied with each asset.
+
+- **WaveGen:** Copyright (c) 2026 Sang-Hoon Lee. [Project](https://github.com/sh-lee-prml/WaveGen), [retained MIT license](licenses/WaveGen/LICENSE), [upstream third-party inventory](licenses/WaveGen/THIRD_PARTY_NOTICES.md). Native preprocessing/sampling and model export were prepared for this application. The exported Flash/V-Spec weights retain the [CC BY-NC 4.0 model terms](licenses/WaveGen/MODEL_LICENSE.txt).
+- **NVIDIA NemotronLabs RE-USE:** Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved. [Source](https://huggingface.co/nvidia/NVIDIA-NemotronLabs-RE-USE), [OpenMDW-1.1](licenses/REUSE-OpenMDW-1.1.txt). Integration changes include ONNX export, a Windows CUDA scan, native FFT/preprocessing, and resident chunked processing.
+- **Mamba:** reference implementation by Tri Dao and Albert Gu. [Source](https://github.com/state-spaces/mamba), [Apache-2.0](licenses/Mamba-Apache-2.0.txt). The native scan and export were checked against its reference recurrence; retained reference source, when supplied in developer materials, keeps its copyright headers.
+- **ONNX Runtime:** Microsoft Corporation, MIT. SDK and runtime packs retain ONNX Runtime's LICENSE and third-party notices.
+- **cpp-httplib:** Yuji Hirose, MIT; **nlohmann/json:** Niels Lohmann, MIT. The vendored headers retain notices and accompanying license files in `third_party/headers/`.
+- **NVIDIA CUDA/NVRTC/cuDNN:** proprietary runtime components, distributed only with their applicable NVIDIA notices/EULAs. No MIT grant applies to them.
+- **LLVM-MinGW and linked compiler runtimes:** the Windows EXE statically links compiler/runtime support. Applicable [LLVM license](licenses/toolchain/LLVM-LICENSE.txt) and MinGW notices, including [MinGW-w64 runtime](licenses/toolchain/MinGW-COPYING.MinGW-w64-runtime.txt) and [winpthreads](licenses/toolchain/MinGW-COPYING.winpthreads.txt), are retained in `licenses/toolchain/` and must accompany the binary. The full compiler is a separate developer download; these linked portions retain their own terms.
+- **CMU ARCTIC recordings:** Carnegie Mellon University, 2003 (SLT/BDL) and 2004 (RMS); John Kominek and Alan W Black. [Official source](http://festvox.org/cmu_arctic/). Original COPYING files are in `presets/licenses/`; 16→24 kHz resampling is the preparation change. These recordings are not CC0.
+
+Microsoft's Visual C++ runtime is a separate prerequisite downloaded from Microsoft. The three supplied fictional portraits have a [separate artwork notice](docs/ARTWORK.md). Private user data is not part of the source or release distribution.

@@ -1,0 +1,40 @@
+"use strict";
+(() => {
+  const messages = {
+    "referenceX.open": ["Edit / optimize reference", "참조 음성 편집 / 최적화", "编辑 / 优化参考音频", "参照音声を編集・調整"],
+    "referenceX.title": ["Prepare your reference", "참조 음성 다듬기", "准备参考音频", "参照音声を整える"],
+    "referenceX.guide": ["1. Keep a clear phrase. 2. Listen to the prepared audio. 3. Match its words below.", "1. 또렷한 한 구간을 남기세요. 2. 다듬은 음성을 들어보세요. 3. 아래 대사를 맞추세요.", "1. 保留清晰的一段。2. 试听处理后的音频。3. 核对下方文字。", "1. 明瞭な一節を選ぶ。2. 調整後の音声を聴く。3. 下の文章と照合する。"],
+    "referenceX.waveform": ["Original audio waveform. Drag to choose the region to keep, or enter start and end times below.", "원본 음성 파형. 드래그하거나 아래 시작·종료 시간을 입력해 남길 구간을 선택하세요.", "原始音频波形。拖动选择保留区域，或在下方输入起止时间。", "元の音声波形。ドラッグするか、下に開始・終了時刻を入力して残す範囲を選びます。"],
+    "referenceX.rangeHint": ["Only the highlighted region is kept. Changes stay reversible until you save.", "강조된 구간만 남겨요. 저장 전에는 되돌릴 수 있어요.", "仅保留高亮区域。保存前可撤销更改。", "ハイライトした範囲だけを残します。保存前は変更を取り消せます。"],
+    "referenceX.start": ["Start (seconds)", "시작 (초)", "开始（秒）", "開始（秒）"],
+    "referenceX.end": ["End (seconds)", "종료 (초)", "结束（秒）", "終了（秒）"],
+    "referenceX.range": ["Selected {start}–{end}s · {duration}s", "선택 {start}–{end}초 · {duration}초", "已选 {start}–{end} 秒 · {duration} 秒", "選択 {start}–{end}秒 · {duration}秒"],
+    "referenceX.playSelection": ["Play selected region", "선택 구간 듣기", "试听所选区域", "選択範囲を聴く"],
+    "referenceX.stop": ["Stop preview", "미리듣기 중지", "停止试听", "試聴を停止"],
+    "referenceX.prepared": ["Prepared audio · this is what will be saved", "다듬은 음성 · 이 소리로 저장해요", "处理后的音频 · 将保存此音频", "調整後の音声・この音声が保存されます"],
+    "referenceX.savedPreview": ["Saved reference preview", "저장된 참조 음성 미리듣기", "已保存的参考音频试听", "保存済み参照音声の試聴"],
+    "referenceX.undo": ["Undo edit", "편집 되돌리기", "撤销编辑", "編集を元に戻す"],
+    "referenceX.redo": ["Redo edit", "편집 다시 실행", "重做编辑", "編集をやり直す"],
+    "referenceX.reset": ["Restore full original", "전체 원본으로 복원", "恢复完整原始音频", "元の音声全体に戻す"],
+    "referenceX.normalize": ["Adjust peak volume safely", "피크 볼륨 안전하게 맞추기", "安全调整峰值音量", "ピーク音量を安全に調整"],
+    "referenceX.normalizeHint": ["Optional · targets −3 dBFS, with at most +12 dB gain. This does not remove noise or repair clipped audio.", "선택 사항 · −3 dBFS를 목표로 최대 +12 dB까지만 올려요. 잡음 제거나 찌그러진 녹음 복원 기능은 아니에요.", "可选 · 目标为 −3 dBFS，最多增益 +12 dB。此功能不会降噪或修复削波。", "任意・−3 dBFSを目標に、増幅は最大+12 dB。ノイズ除去やクリッピングの修復は行いません。"],
+    "referenceX.gain": ["Volume change {gain} dB", "볼륨 변화 {gain} dB", "音量变化 {gain} dB", "音量変更 {gain} dB"],
+    "referenceX.quality": ["Prepared {duration}s · peak {peak} dBFS", "완성 {duration}초 · 피크 {peak} dBFS", "处理后 {duration} 秒 · 峰值 {peak} dBFS", "調整後 {duration}秒 · ピーク {peak} dBFS"],
+    "referenceX.recommend": ["Aim for 3–10 seconds of one speaker, with complete words and little background noise.", "한 사람의 말이 또렷하고 배경 소음이 적은 3–10초 구간을 권장해요. 단어 중간을 자르지 마세요.", "建议选择单人说话、词句完整、背景噪声较少的 3–10 秒片段。", "一人の声が明瞭で、単語が途切れず、背景音の少ない3〜10秒をおすすめします。"],
+    "referenceX.noAutoCheck": ["Noise and transcript accuracy are not checked automatically. Listen and verify them yourself.", "잡음과 대사 정확성을 자동 검사하지 않아요. 직접 듣고 확인해 주세요.", "不会自动检查噪声或转写准确性。请自行试听并核对。", "ノイズや文章の正確さは自動検査しません。ご自身で聴いて確認してください。"],
+    "referenceX.clipped": ["The selected source has full-scale peaks. Lowering volume cannot restore missing detail; a cleaner recording may work better.", "선택한 원본에 최대 음량에 닿는 부분이 있어요. 볼륨을 낮춰도 손실된 소리는 복원되지 않으므로 더 깨끗한 녹음을 권장해요.", "所选原始音频含满幅峰值。降低音量无法恢复丢失的细节，建议使用更清晰的录音。", "選択した元音声に最大振幅のピークがあります。音量を下げても失われた音は戻らないため、より明瞭な録音をおすすめします。"],
+    "referenceX.quiet": ["The prepared recording is very quiet. Try optional volume adjustment or a clearer recording.", "다듬은 음성이 매우 작아요. 볼륨 조정을 켜거나 더 또렷한 녹음을 사용해 보세요.", "处理后的录音音量很低。可尝试音量调整或更清晰的录音。", "調整後の音声がとても小さいです。音量調整または、より明瞭な録音をお試しください。"],
+    "referenceX.long": ["Keep less than 30 seconds. Drag a shorter region or change the start and end times.", "30초 미만으로 남겨 주세요. 더 짧은 구간을 드래그하거나 시작·종료 시간을 바꾸세요.", "请保留少于 30 秒。拖动选择较短区域，或修改起止时间。", "30秒未満にしてください。短い範囲をドラッグするか、開始・終了時刻を変更してください。"],
+    "referenceX.invalidRange": ["Enter a start and end within the original audio, with at least 0.05 seconds between them.", "원본 길이 안에서 시작·종료 시간을 입력하고 0.05초 이상 남겨 주세요.", "请在原始音频范围内输入起止时间，间隔至少 0.05 秒。", "元音声の範囲内で開始・終了時刻を指定し、0.05秒以上残してください。"],
+    "referenceX.invalidSamples": ["This audio contains invalid samples. Choose another recording.", "음성에 유효하지 않은 값이 있어요. 다른 녹음을 선택해 주세요.", "音频含无效采样值。请选择另一段录音。", "音声に無効なサンプルが含まれています。別の録音を選んでください。"],
+    "referenceX.confirm": ["I listened to the prepared audio and checked that Reference Text contains exactly its spoken words.", "다듬은 음성을 듣고 Reference Text가 실제로 들리는 대사와 정확히 일치하는지 확인했어요.", "我已试听处理后的音频，并确认 Reference Text 与其中实际说出的文字完全一致。", "調整後の音声を聴き、Reference Textが実際に話された言葉と正確に一致することを確認しました。"],
+    "referenceX.confirmNeeded": ["Listen to the prepared audio, update its transcript if needed, then confirm the match before saving.", "다듬은 음성을 듣고 필요하면 대사를 수정한 뒤, 일치 확인에 체크하고 저장해 주세요.", "请试听处理后的音频，必要时修改文字，并确认一致后再保存。", "調整後の音声を聴き、必要なら文章を直して、一致を確認してから保存してください。"],
+    "referenceX.wordsChanged": ["Your selected words may have changed. Update Reference Text to match the prepared audio; it is never rewritten automatically.", "선택한 구간의 대사가 달라졌을 수 있어요. 다듬은 음성에 맞춰 Reference Text를 고쳐 주세요. 대사는 자동 수정하지 않아요.", "所选区域中的话语可能已改变。请根据处理后的音频修改 Reference Text，系统不会自动改写文字。", "選んだ範囲の言葉が変わった可能性があります。調整後の音声に合わせてReference Textを直してください。文章は自動で書き換えません。"],
+    "referenceX.loaded": ["Original loaded. Nothing changes until you edit a setting.", "원본을 불러왔어요. 설정을 바꾸기 전에는 저장된 음성을 변경하지 않아요.", "已加载原始音频。修改设置前，不会更改已保存的音频。", "元音声を読み込みました。設定を変更するまで保存済みの音声は変わりません。"],
+    "referenceX.loading": ["Loading original audio…", "원본 음성 불러오는 중…", "正在加载原始音频…", "元の音声を読み込み中…"],
+    "referenceX.originalLength": ["Original {duration}s", "원본 {duration}초", "原始音频 {duration} 秒", "元音声 {duration}秒"],
+    "referenceX.selectionPreview": ["Selected region preview", "선택 구간 미리듣기", "所选区域试听", "選択範囲の試聴"],
+    "referenceX.loadFirst": ["Open the reference editor to adjust silence trimming or choose a shorter region.", "참조 음성 편집을 열면 무음 제거를 조절하거나 더 짧은 구간을 고를 수 있어요.", "打开参考音频编辑器，可调整静音裁剪或选择更短区域。", "参照音声エディターを開くと、無音除去の調整や短い範囲の選択ができます。"]
+  };
+  for (const [index, locale] of ["en", "ko", "zh", "ja"].entries()) window.StudioI18n.register(locale, Object.fromEntries(Object.entries(messages).map(([key, values]) => [key, values[index]])));
+})();
