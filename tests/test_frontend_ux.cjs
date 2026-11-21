@@ -65,7 +65,7 @@ elements.get('speed').value = '1'; elements.get('seed').value = '0';
 elements.get('duration-mode').value = 'auto'; elements.get('duration-seconds').value = '10';
 const document = {
   getElementById: id => elements.get(id), querySelector: () => new Element(),
-  querySelectorAll: selector => selector === 'audio' ? Array.from(elements.values()).filter(element => /player$/.test(element.id)) : [], addEventListener(type, callback) { documentListeners.set(type, callback); }, body: new Element(), documentElement: { lang: 'en' },
+  querySelectorAll: selector => selector === 'audio' ? Array.from(elements.values()).filter(element => /player$/.test(element.id)) : [], addEventListener(type, callback) { documentListeners.set(type, callback); }, body: new Element(), documentElement: new Element(),
   createElement(tag) {
     if (tag === 'canvas') return { width: 0, height: 0, getContext: () => ({ drawImage(...args) { avatarDraws.push(args); } }), toBlob(callback, type) { callback(new Blob(['cropped-image-without-original-metadata'], { type })); } };
     return new Element();
@@ -152,6 +152,7 @@ const exportNames = 'state,textIssue,currentDraft,applyDraft,readDraft,planKey,s
 assert(/\}\)\(\);\s*$/.test(productionSource), 'Frontend IIFE boundary changed; update test harness intentionally.');
 const instrumentedSource = productionSource.replace(/\}\)\(\);\s*$/, `globalThis.__test={${exportNames}};})();`);
 const windowListeners = new Map();
+const systemTheme = { matches: true, addEventListener(type, callback) { this.onChange = callback; } };
 class TestURL extends URL {
   static createObjectURL() { const value = 'blob:mock-' + ++nextObjectUrl; activeObjectUrls.add(value); return value; }
   static revokeObjectURL(value) { revokedUrls.push(value); activeObjectUrls.delete(value); }
@@ -179,6 +180,7 @@ const sandbox = {
   clearTimeout: id => timers.delete(id),
 };
 vm.createContext(sandbox);
+sandbox.window.matchMedia = () => systemTheme;
 for (const filename of catalogNames) vm.runInContext(fs.readFileSync(path.join(webRoot, filename), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(webRoot, 'reference-editor.js'), 'utf8'), sandbox, { filename: 'reference-editor.js' });
 vm.runInContext(instrumentedSource, sandbox);
@@ -192,6 +194,54 @@ async function main() {
   assert.equal(t.currentDraft().text, 'Legacy English draft.');
   assert.equal(JSON.parse(storage.get('wavegen.draft.v1')).version, 1);
   passed('Legacy draft migration');
+
+  const theme = elements.get('ui-theme');
+  const selectTheme = value => { theme.value = value; theme.listeners.change[0](); };
+  assert.equal(theme.value, 'system');
+  assert.equal(document.documentElement.getAttribute('data-theme'), 'dark');
+  systemTheme.matches = false; systemTheme.onChange();
+  assert.equal(document.documentElement.getAttribute('data-theme'), 'light');
+  selectTheme('dark');
+  assert.equal(storage.get('wavegen.ui.theme'), 'dark');
+  systemTheme.onChange();
+  assert.equal(document.documentElement.getAttribute('data-theme'), 'dark');
+  selectTheme('light');
+  assert.equal(document.documentElement.getAttribute('data-theme'), 'light');
+  assert.equal(storage.get('wavegen.ui.theme'), 'light');
+  selectTheme('system');
+  passed('System theme tracks Windows; White and Black persist as manual overrides');
+
+  elements.get('nav-recordings').click();
+  assert(elements.get('create-view').hidden);
+  assert.equal(document.activeElement.id, 'history-search');
+  elements.get('nav-create').click();
+  assert(elements.get('recordings-view').hidden);
+  assert.equal(t.currentDraft().text, 'Legacy English draft.');
+  elements.get('change-voice').click();
+  assert.equal(elements.get('studio-workspace').dataset.library, 'open');
+  assert.equal(document.activeElement.id, 'voice-search');
+  elements.get('library-back').click();
+  assert.equal(elements.get('studio-workspace').dataset.library, 'closed');
+  assert.equal(document.activeElement.id, 'change-voice');
+  passed('Recordings and the compact voice library preserve the draft and restore keyboard focus');
+
+  elements.get('sample-script').click();
+  assert.equal(t.currentDraft().text, 'Legacy English draft.');
+  elements.get('generation-text').value = '';
+  elements.get('sample-script').click();
+  assert.ok(t.currentDraft().text.length > 20);
+  assert.equal(document.activeElement.id, 'generation-text');
+  const advanced = elements.get('advanced-options');
+  advanced.open = true; advanced.listeners.toggle[0]();
+  assert.equal(storage.get('wavegen.ui.advancedOpen'), 'true');
+  advanced.open = false; advanced.listeners.toggle[0]();
+  const audition = elements.get('audition-player');
+  await elements.get('voice-audition').listeners.click[0]();
+  assert.equal(audition.paused, false);
+  assert.equal(audition.src, 'http://localhost:7887/api/audio/voices/a');
+  await elements.get('voice-audition').listeners.click[0]();
+  assert.equal(audition.paused, true);
+  passed('Sample script preserves existing text, setting disclosure persists, and the selected voice can be auditioned');
 
   t.applyDraft({ text: 'Updated draft.', voice_id: voice.id, speed: 1.25, seed: 17, split_long_text: false });
   const saved = JSON.parse(storage.get('wavegen.draft.v1'));
@@ -453,6 +503,15 @@ async function main() {
   const presetVoice = { ...voice, name: 'Mira <test>', avatar_url: '/api/avatars/mira.png', preset: true, builtin: false,
     source: { dataset: 'Licensed source <safe>', url: 'javascript:alert(1)', attribution: 'Credit <speaker>', fictional_character: true },
     license: { title: 'CC BY 4.0', url: 'https://creativecommons.org/licenses/by/4.0/', notice: '</pre><img src=x onerror=alert(1)> Original notice.' } };
+  const savedVoices = t.state.voices;
+  t.state.voices = [{ ...presetVoice, description: 'Scottish English · <AWB>' }, voice];
+  elements.get('voice-search').value = 'scottish';
+  t.renderVoices();
+  assert(elements.get('voice-list').innerHTML.includes('Scottish English · &lt;AWB&gt;'));
+  assert(!elements.get('voice-list').innerHTML.includes('Sample voice'));
+  elements.get('voice-search').value = '';
+  t.state.voices = savedVoices; t.renderVoices();
+  passed('Starter voices display and search escaped accent and speaker metadata');
   t.openVoiceEditor(presetVoice);
   assert.equal(elements.get('voice-source').hidden, false);
   const terms = elements.get('voice-source-content').innerHTML;

@@ -73,13 +73,14 @@
     const context = canvas.getContext("2d"); if (!context) return;
     context.scale(scale, scale); context.clearRect(0, 0, width, height);
     const duration = source.length / RATE, start = settings.startSeconds / duration * width, end = settings.endSeconds / duration * width;
-    context.fillStyle = "#eef3ef"; context.fillRect(0, 0, width, height);
-    context.fillStyle = "#d0ebe4"; context.fillRect(start, 0, end - start, height);
+    const dark = document.documentElement.getAttribute?.("data-theme") === "dark";
+    context.fillStyle = dark ? "#191919" : "#f7f7f7"; context.fillRect(0, 0, width, height);
+    context.fillStyle = dark ? "#233651" : "#dfebfc"; context.fillRect(start, 0, end - start, height);
     if (!peakCache || peakCache.source !== source || peakCache.width !== width) peakCache = { source, width, values: waveformPeaks(source, width) };
     const peaks = peakCache.values;
-    context.strokeStyle = "#387f72"; context.lineWidth = 1; context.beginPath();
+    context.strokeStyle = dark ? "#b7c7de" : "#52647e"; context.lineWidth = 1; context.beginPath();
     peaks.forEach(([min, max], i) => { context.moveTo(i + .5, height / 2 - max * 44); context.lineTo(i + .5, height / 2 - min * 44); }); context.stroke();
-    context.strokeStyle = "#007763"; context.lineWidth = 2;
+    context.strokeStyle = dark ? "#86b5fb" : "#275698"; context.lineWidth = 2;
     for (const x of [start, end]) { context.beginPath(); context.moveTo(x, 0); context.lineTo(x, height); context.stroke(); }
   }
   function render(syncRange = false) {
@@ -193,6 +194,7 @@
     canvas.addEventListener("pointerup", (event) => { if (!drag || event.pointerId !== drag.id) return; const next = drag.next; drag = null; commit(next); });
     canvas.addEventListener("pointercancel", () => { drag = null; draw(); });
     window.addEventListener("resize", () => draw());
+    window.addEventListener("studio-theme-change", () => draw());
   }
   window.StudioReferenceEditor = { init, clear, setSource, setProcessed, setBusy, stop, refreshLocale: render,
     getSettings: () => history?.current || null, changeSettings: (value) => history && commit({ ...history.current, ...value }),

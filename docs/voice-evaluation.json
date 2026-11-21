@@ -1,0 +1,108 @@
+{
+  "version": "0.2.0-beta.1",
+  "date": "2026-11-21",
+  "seed": 23,
+  "speed": 1.0,
+  "duration": "auto",
+  "enhancement": false,
+  "asr": "faster-whisper-large-v3",
+  "speaker_similarity": "WavLM-Large / ECAPA cosine",
+  "held_out": [
+    {
+      "voice": "Cairn",
+      "model": "flash",
+      "reference_sha256": "5f9a5a4f2bd0dfb9f0bcfe1666820e1d6e88cc0d196f870a317233fe70128337",
+      "text": "It was raining when we left the library, but the walk home was lovely.",
+      "asr_transcript": "It was raining when we left the library, but the walk home was lovely.",
+      "reference_words": 14,
+      "word_errors": 0,
+      "wer": 0.0,
+      "sim": 0.6859089136123657,
+      "wav_sha256": "cd640b204cfee5e7179bfb223a004b06de9eda933a7507381be7d08ca2d2aab7"
+    },
+    {
+      "voice": "Cairn",
+      "model": "flash",
+      "reference_sha256": "5f9a5a4f2bd0dfb9f0bcfe1666820e1d6e88cc0d196f870a317233fe70128337",
+      "text": "Before you start recording, take a breath and read the first line aloud.",
+      "asr_transcript": "Before you start recording, take a breath and read the first line aloud.",
+      "reference_words": 13,
+      "word_errors": 0,
+      "wer": 0.0,
+      "sim": 0.7828518748283386,
+      "wav_sha256": "bf93d9a021cc8852be2fbae4c8ea7d7d525b4ab6c16d8ca32e5fa358b05c6b83"
+    },
+    {
+      "voice": "Cairn",
+      "model": "vspec",
+      "reference_sha256": "5f9a5a4f2bd0dfb9f0bcfe1666820e1d6e88cc0d196f870a317233fe70128337",
+      "text": "It was raining when we left the library, but the walk home was lovely.",
+      "asr_transcript": "It was raining when we left the library, but the walk home was lovely.",
+      "reference_words": 14,
+      "word_errors": 0,
+      "wer": 0.0,
+      "sim": 0.71471107006073,
+      "wav_sha256": "0fa9ed7329fe60802a203de5a424e00d66ce00ca6547bd236c38a9f0a900de26"
+    },
+    {
+      "voice": "Cairn",
+      "model": "vspec",
+      "reference_sha256": "5f9a5a4f2bd0dfb9f0bcfe1666820e1d6e88cc0d196f870a317233fe70128337",
+      "text": "Before you start recording, take a breath and read the first line aloud.",
+      "asr_transcript": "Before you start recording, take a breath and read the first line aloud.",
+      "reference_words": 13,
+      "word_errors": 0,
+      "wer": 0.0,
+      "sim": 0.731676459312439,
+      "wav_sha256": "087bebf5e4c99cd69495219019e1cb69b8300704eb5c554cdff225c92eb2f054"
+    },
+    {
+      "voice": "Iris",
+      "model": "flash",
+      "reference_sha256": "7c49292f4a89216574d8ea9d9c1fe342333fa86c7111306580b2ffa06a5f1088",
+      "text": "It was raining when we left the library, but the walk home was lovely.",
+      "asr_transcript": "It was raining when we left the library, but the walk home was lovely.",
+      "reference_words": 14,
+      "word_errors": 0,
+      "wer": 0.0,
+      "sim": 0.7584896087646484,
+      "wav_sha256": "feca27b8ff8405ac7b85d42dd5e1c5703449722bc57cf9345e90713f64824826"
+    },
+    {
+      "voice": "Iris",
+      "model": "flash",
+      "reference_sha256": "7c49292f4a89216574d8ea9d9c1fe342333fa86c7111306580b2ffa06a5f1088",
+      "text": "Before you start recording, take a breath and read the first line aloud.",
+      "asr_transcript": "Before you start recording, take a breath and read the first line aloud.",
+      "reference_words": 13,
+      "word_errors": 0,
+      "wer": 0.0,
+      "sim": 0.815690815448761,
+      "wav_sha256": "e91e0bd306481a4837f19ff362b3fcecc3f13609418660450e9688bdfc77623c"
+    },
+    {
+      "voice": "Iris",
+      "model": "vspec",
+      "reference_sha256": "7c49292f4a89216574d8ea9d9c1fe342333fa86c7111306580b2ffa06a5f1088",
+      "text": "It was raining when we left the library, but the walk home was lovely.",
+      "asr_transcript": "It was raining when we left the library, but the walk home was lovely.",
+      "reference_words": 14,
+      "word_errors": 0,
+      "wer": 0.0,
+      "sim": 0.7871346473693848,
+      "wav_sha256": "66ccb9dcd46d76b532a79fe2ac9b82a34525b18d5f33f3ebf78276843ccfa414"
+    },
+    {
+      "voice": "Iris",
+      "model": "vspec",
+      "reference_sha256": "7c49292f4a89216574d8ea9d9c1fe342333fa86c7111306580b2ffa06a5f1088",
+      "text": "Before you start recording, take a breath and read the first line aloud.",
+      "asr_transcript": "Before you start recording, take a breath and read the first line aloud.",
+      "reference_words": 13,
+      "word_errors": 0,
+      "wer": 0.0,
+      "sim": 0.8086845278739929,
+      "wav_sha256": "51688ad72edbcbd965a0dcbf7fef030f1de53c53e4bda1a3a8f6ec195efa4bbd"
+    }
+  ]
+}

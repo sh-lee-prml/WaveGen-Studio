@@ -8,6 +8,23 @@
   };
   for (const [locale, catalog] of Object.entries(catalogs)) window.StudioI18n.register(locale, catalog);
   const output = {
+    "studio.workspace": ["Workspace", "작업 공간", "工作区", "ワークスペース"],
+    "studio.theme": ["Color theme", "화면 테마", "界面主题", "画面テーマ"],
+    "studio.system": ["System", "시스템", "跟随系统", "システム"],
+    "studio.light": ["White", "화이트", "白色", "ホワイト"],
+    "studio.dark": ["Black", "블랙", "黑色", "ブラック"],
+    "studio.create": ["Create", "음성 만들기", "创作", "作成"],
+    "studio.recordings": ["Recordings", "녹음 보관함", "录音", "録音"],
+    "studio.voices": ["Voice library", "목소리 라이브러리", "声音库", "音声ライブラリ"],
+    "studio.returnToScript": ["Back to script", "대본으로 돌아가기", "返回文稿", "原稿に戻る"],
+    "studio.speech": ["Speech studio", "음성 스튜디오", "语音工作室", "音声スタジオ"],
+    "studio.change": ["Change", "변경", "更换", "変更"],
+    "studio.preview": ["Preview selected voice", "선택한 목소리 미리 듣기", "试听所选声音", "選択した声を試聴"],
+    "studio.previewError": ["The voice preview could not be played.", "목소리 미리 듣기를 재생할 수 없습니다.", "无法播放所选声音。", "選択した声を再生できませんでした。"],
+    "studio.script": ["Script", "대본", "文稿", "原稿"],
+    "studio.sample": ["Try a sample", "예시 대본 넣기", "试用示例", "例文を使う"],
+    "studio.placeholder": ["Type or paste your English script…", "영어 대본을 입력하거나 붙여넣으세요…", "输入或粘贴英文文稿…", "英文の原稿を入力または貼り付けてください…"],
+    "studio.outputEmpty": ["Generate a script to listen here.", "대본으로 음성을 생성하면 여기서 들어볼 수 있습니다.", "生成音频后可在此试听。", "音声を生成するとここで再生できます。"],
     "output.ready": ["Ready to listen", "바로 들을 수 있어요", "可以收听了", "再生できます"],
     "output.view": ["View audio", "생성 음성 보기", "查看音频", "音声を表示"],
     "output.details": ["Text and generation details", "문장과 생성 정보", "文本与生成详情", "文章と生成情報"],

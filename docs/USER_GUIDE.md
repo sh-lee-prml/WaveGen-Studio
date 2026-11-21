@@ -4,11 +4,11 @@
 
 ## Generate and listen
 
-Choose a voice on the left, enter English text, and select **Generate** or press Ctrl+Enter. **Flash** is the four-step model; **V-Spec** is a separate checkpoint with 50 steps. Selecting a model does not start a generation. A model stays loaded after its first use until you quit the application.
+In **Create**, choose a voice and use the preview button to listen to its reference. On a narrow screen, choose **Change** beside the selected voice to open the library. Enter English text or choose **Try a sample** to fill the empty script. Select **Generate** or press Ctrl+Enter. Flash uses four steps and V-Spec uses 50. A model stays loaded after its first use until you quit the application.
 
 The latest output is beside the composer on wide screens and immediately below Generate on narrower screens. Use **View audio** to jump to it when needed. Generation does not automatically play audio or move your focus. Download the WAV, open **Speech Edit**, or expand the result details. Generated files use 24 kHz mono audio.
 
-Text and settings are saved in the browser. The selected interface language is also saved there, independently of the draft. Clearing site data removes these preferences; it does not remove the application's `data/` recordings.
+Open **Recordings** to find earlier takes, or return to **Create** to continue your draft. The theme control in the header lets you switch between white and black. Your draft, theme choice, and interface language are saved in the browser. The app stores audio separately in `data/`.
 
 ## Length, speed, and seed
 

@@ -14,8 +14,8 @@ The license of the application code is separate from the licenses of models, rec
 | Statically linked LLVM-MinGW runtime portions | Applicable LLVM/MinGW notices in `licenses/toolchain/`, retained with the application binary |
 | NVIDIA CUDA, NVRTC, and cuDNN runtime components | NVIDIA's applicable license/EULA and redistributable terms, included with the corresponding runtime packs; not MIT |
 | Microsoft Visual C++ runtime | Install the official Microsoft x64 Redistributable separately; Studio does not grant or replace its license |
-| Mira / Rowan / Kai reference recordings | Original CMU ARCTIC conditions in `presets/licenses/`; retain copyright, conditions, disclaimer, author names, and modification notices |
-| Three starter portraits | [Dedicated fictional-artwork notice](ARTWORK.md); not images of the recording speakers |
+| Starter reference recordings | Original CMU ARCTIC conditions in `presets/licenses/`; retain copyright, conditions, disclaimer, author names, and modification notices |
+| Five starter portraits | [Dedicated fictional-artwork notice](ARTWORK.md); not images of the recording speakers |
 | Submitted or locally added voices/images | Their own stated permissions and licenses; not automatically MIT |
 
 ## Model origins and modifications
@@ -32,7 +32,9 @@ This repository does not claim an MIT-only license for the whole upstream resear
 
 Mira, Rowan, and Kai are fictional display aliases for the SLT, BDL, and RMS CMU ARCTIC sources, respectively, using utterance `arctic_a0010`. Source: [CMU ARCTIC](http://festvox.org/cmu_arctic/), John Kominek and Alan W Black, *CMU ARCTIC databases for speech synthesis*, CMU-LTI-03-177. SLT and BDL carry Carnegie Mellon University copyright 2003; RMS carries 2004.
 
-The supplied full utterances were converted from 16 kHz mono PCM16 to 24 kHz mono PCM16 using polyphase resampling (`up=3`, `down=2`). No trimming, denoising, gain adjustment, new words, or added silence was applied. The recordings are not CC0 or public domain. Their original notices allow broad use subject to the retained conditions; this is not a claim of speaker endorsement or unlimited identity/personality rights. See the supplied `presets/licenses/` and preset source metadata.
+The two new profiles are Iris (CLB, `arctic_a0022`, CMU copyright 2005) and Cairn (AWB, `arctic_a0003`, CMU copyright 2003). Their full utterances were resampled to 24 kHz mono PCM16 with FFmpeg libswresample.
+
+The original three full utterances were converted from 16 kHz mono PCM16 to 24 kHz mono PCM16 using polyphase resampling (`up=3`, `down=2`). No trimming, denoising, gain adjustment, new words, or added silence was applied. The recordings are not CC0 or public domain. Their original notices allow broad use subject to the retained conditions; this is not a claim of speaker endorsement or unlimited identity/personality rights. See the supplied `presets/licenses/` and preset source metadata.
 
 ## Redistribution
 

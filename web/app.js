@@ -315,13 +315,17 @@
     }
     if (state.voicesLoading) return;
     const query = $("voice-search").value.trim().toLowerCase();
-    const voices = state.voices.filter((voice) => String(voice.name).toLowerCase().includes(query));
+    const voices = state.voices.filter(voice => [voice.name, voice.description, voice.source?.speaker]
+      .some(value => typeof value === "string" && value.toLowerCase().includes(query)));
     if (!voices.length) {
       $("voice-list").innerHTML = `<div class="library-empty"><strong>${state.voicesError ? t("library.loadError") : query ? t("library.noMatch") : t("library.empty")}</strong>${state.voicesError ? t("library.reconnectHint") : query ? t("library.searchHint") : t("library.emptyHint")}</div>`;
     } else {
       $("voice-list").innerHTML = voices.map((voice) => {
         const selected = String(voice.id) === state.selectedId;
-        const label = voice.preset ? t(voice.preset_modified ? "libraryX.modifiedPreset" : "libraryX.preset") : voice.builtin ? t("library.example") : voice.duration_seconds ? t("library.savedDuration", { duration: formatDuration(voice.duration_seconds) }) : t("common.savedVoice");
+        let label = voice.duration_seconds ? t("library.savedDuration", { duration: formatDuration(voice.duration_seconds) }) : t("common.savedVoice");
+        if (voice.preset_modified) label = t("libraryX.modifiedPreset");
+        else if (voice.preset) label = voice.description || voice.source?.speaker || t("libraryX.preset");
+        else if (voice.builtin) label = t("library.example");
         return `<div class="voice-card${selected ? " is-selected" : ""}"><button class="voice-select" type="button" data-voice-id="${escapeHtml(voice.id)}" aria-pressed="${selected}" title="${escapeHtml(voice.name)}"><span class="avatar" data-color="${avatarColor(voice.id)}" aria-hidden="true">${avatarContents(voice)}</span><span class="voice-card-copy"><strong>${escapeHtml(voice.name)}</strong><small>${escapeHtml(label)}</small></span>${selected ? `<span class="voice-selected-icon">${icons.check}</span>` : ""}</button></div>`;
       }).join("");
     }
@@ -331,6 +335,16 @@
     const voice = selectedVoice();
     $("selected-voice-name").textContent = voice?.name || t("composer.chooseFromLibrary");
     $("selected-voice-edit").disabled = !voice || state.stopped;
+    const player = $("audition-player");
+    const url = safeAudioUrl(voice?.audio_url);
+    if (player.dataset.voiceUrl !== url) {
+      player.pause();
+      player.removeAttribute("src");
+      player.dataset.voiceUrl = url;
+      player.load();
+      $("voice-audition").setAttribute("aria-pressed", "false");
+    }
+    $("voice-audition").disabled = !url || state.stopped;
     const avatar = $("selected-voice").querySelector(".avatar");
     avatar.innerHTML = avatarContents(voice);
     avatar.dataset.color = voice ? avatarColor(voice.id) : "0";
@@ -630,7 +644,7 @@
     refreshOutputStatus();
     const active = state.history.find((item) => String(item.id) === state.activeResultId);
     if (!active) {
-      $("result-player").innerHTML = `<div class="result-empty"><div class="empty-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><h3>${escapeHtml(t("result.emptyTitle"))}</h3><p>${escapeHtml(t("result.emptyHint"))}</p></div>`;
+      $("result-player").innerHTML = `<div class="result-empty"><div class="empty-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><p>${escapeHtml(t("studio.outputEmpty"))}</p></div>`;
       state.renderedResultId = "";
       return;
     }
@@ -1509,6 +1523,7 @@
   }
   function renderDraftLabels() {
     renderModelControl("generation-model", "generation-model-hint", state.modelId, isBusy() || state.stopped);
+    $("sample-script").hidden = !!$("generation-text").value.length;
     const bytes = new TextEncoder().encode($("generation-text").value.trim()).length;
     $("text-count").innerHTML = `${bytes.toLocaleString(i18n.getLocale())} <span>/ 5,000</span>`;
     $("text-count").title = t("composer.byteHint");
@@ -1610,6 +1625,74 @@
     await refreshStatus();
   }
 
+  function showWorkspace(view) {
+    const recordings = view === "recordings";
+    $("studio-workspace").dataset.view = view;
+    $("studio-workspace").dataset.library = "closed";
+    $("create-view").hidden = recordings;
+    $("recordings-view").hidden = !recordings;
+    $("nav-create").setAttribute("aria-pressed", String(!recordings));
+    $("nav-recordings").setAttribute("aria-pressed", String(recordings));
+    if (recordings) document.querySelectorAll("audio").forEach(player => player.pause());
+  }
+
+  $("nav-create").addEventListener("click", () => {
+    showWorkspace("create");
+    $("generation-text").focus();
+  });
+  $("nav-recordings").addEventListener("click", () => {
+    showWorkspace("recordings");
+    $("history-search").focus();
+  });
+  $("change-voice").addEventListener("click", () => {
+    $("studio-workspace").dataset.library = "open";
+    state.showingTrash = false;
+    $("voice-search").value = "";
+    renderVoices();
+    $("voice-search").focus();
+  });
+  $("library-back").addEventListener("click", () => {
+    $("studio-workspace").dataset.library = "closed";
+    $("change-voice").focus();
+  });
+  const audition = $("audition-player");
+  $("voice-audition").addEventListener("click", async () => {
+    if (!audition.paused) { audition.pause(); return; }
+    const source = audition.dataset.voiceUrl;
+    if (!source) return;
+    if (audition.src !== source) audition.src = source;
+    try { await audition.play(); } catch (error) {
+      if (error.name !== "AbortError" && audition.dataset.voiceUrl === source) showToast(t("studio.previewError"));
+    }
+  });
+  for (const event of ["play", "pause", "ended"]) {
+    audition.addEventListener(event, () => $("voice-audition").setAttribute("aria-pressed", String(!audition.paused && !audition.ended)));
+  }
+  $("sample-script").addEventListener("click", () => {
+    if ($("generation-text").value.length) return;
+    $("generation-text").value = "The rain had stopped by morning. I opened the window and listened to the first train crossing the river.";
+    onDraftChanged();
+    $("generation-text").focus();
+  });
+  const systemTheme = window.matchMedia?.("(prefers-color-scheme: dark)");
+  const themeSelect = $("ui-theme");
+  function applyTheme(preference) {
+    themeSelect.value = ["light", "dark"].includes(preference) ? preference : "system";
+    const theme = themeSelect.value === "system" ? (systemTheme?.matches ? "dark" : "light") : themeSelect.value;
+    document.documentElement.setAttribute?.("data-theme", theme);
+    $("theme-color").setAttribute("content", theme === "dark" ? "#101010" : "#ffffff");
+    window.dispatchEvent?.(new CustomEvent("studio-theme-change", { detail: { theme } }));
+  }
+  applyTheme(readStorage("wavegen.ui.theme", "system"));
+  themeSelect.addEventListener("change", () => {
+    writeStorage("wavegen.ui.theme", themeSelect.value);
+    applyTheme(themeSelect.value);
+  });
+  systemTheme?.addEventListener("change", () => {
+    if (themeSelect.value === "system") applyTheme("system");
+  });
+  $("advanced-options").open = readStorage("wavegen.ui.advancedOpen", "false") === "true";
+  $("advanced-options").addEventListener("toggle", () => writeStorage("wavegen.ui.advancedOpen", $("advanced-options").open));
   $("ui-language").addEventListener("change", (event) => i18n.setLocale(event.target.value));
   window.addEventListener("studio-locale-change", refreshLocale);
   $("voice-add").addEventListener("click", () => openVoiceEditor());
@@ -1622,10 +1705,12 @@
     if (event.target.closest("[data-trash-retry]")) { refreshTrash(); return; }
     const button = event.target.closest("[data-voice-id]");
     if (!button) return;
+    showWorkspace("create");
     state.selectedId = button.dataset.voiceId;
     state.requireVoiceSelection = false;
     onDraftChanged();
     renderVoices();
+    $("generation-text").focus();
   });
   $("library-active").addEventListener("click", () => { state.showingTrash = false; renderVoices(); });
   $("library-trash").addEventListener("click", () => { state.showingTrash = true; renderVoices(); refreshTrash(); });
@@ -1668,8 +1753,10 @@
   $("history-list").addEventListener("click", (event) => {
     const button = event.target.closest("[data-result-id]");
     if (!button || state.generating || state.recovering) return;
+    showWorkspace("create");
     state.activeResultId = button.dataset.resultId;
     renderResults();
+    $("current-output").focus();
     $("generated-player")?.play().catch(() => {});
   });
   document.addEventListener("play", (event) => {

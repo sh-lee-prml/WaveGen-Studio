@@ -1,4 +1,4 @@
-# WaveGen Studio · 0.1 (beta)
+# WaveGen Studio · 0.2 (beta)
 
 [한국어 안내](README_KO.md) · [Install](docs/INSTALL.md) · [User guide](docs/USER_GUIDE.md) · [Build](docs/BUILDING.md) · [Contribute a voice](docs/VOICE_CONTRIBUTIONS.md)
 
@@ -10,19 +10,21 @@ A local Windows workspace for making and editing English speech with [WaveGen](h
 
 **For the original models, paper, training, and research implementation, please refer to [WaveGen](https://github.com/sh-lee-prml/WaveGen).**
 
-This is an early public beta (`0.1.0-beta.1`). The tested configuration is **Windows x64 with an NVIDIA RTX 5080, 16 GB VRAM**. Other GPUs have not been qualified. The WaveGen model weights use **CC BY-NC 4.0 (non-commercial)**; the Studio code license does not replace those terms.
+The current Windows x64 beta is **0.2.0-beta.1**. It includes five voices, a dedicated recordings library, and white and black themes.
 
-![WaveGen Studio beta with a saved voice, text editor, and generated audio player](docs/images/studio-beta.jpg)
+![WaveGen Studio in its white theme with a voice selected and a generated recording ready to play](docs/images/studio-white.jpg)
+
+[View the black theme](docs/images/studio-black.jpg)
 
 ## Get started
 
-**[Download Windows beta](https://github.com/sh-lee-prml/WaveGen-Studio/releases/download/v0.1.0-beta.1/WaveGen-Studio-0.1.0-beta.1-app-windows-x64.zip)** · [Installation guide](docs/INSTALL.md)
+**[Download Windows beta](https://github.com/sh-lee-prml/WaveGen-Studio/releases/download/v0.2.0-beta.1/WaveGen-Studio-0.2.0-beta.1-app-windows-x64.zip)** · [Installation guide](docs/INSTALL.md)
 
 The app ZIP is for users; GitHub's source-code ZIP is for developers.
 
 1. Extract the app ZIP into a writable folder, then run **Install-WaveGen-Studio.cmd** to download the verified runtime and model packs. See the [installation guide](docs/INSTALL.md) for the NVIDIA driver and Microsoft runtime prerequisites.
 2. Run **Launch-WaveGen-Studio.cmd**. Keep the complete application folder together.
-3. Select **Mira, Rowan, or Kai**, enter a short English sentence, and choose **Generate**. The player appears beside the composer on a wide screen and just below Generate on a small screen.
+3. Select **Mira, Rowan, Kai, Iris, or Cairn**. Preview the voice, enter a short English sentence or choose **Try a sample**, then generate. Use **Recordings** to find an earlier take.
 4. Use **Add your voice** to save your own reference recording and its exact transcript.
 
 The app and runtime come from GitHub Releases. Native Flash, V-Spec, and RE-USE model packs come from the original [LeeSangHoon/WaveGen Hugging Face repository](https://huggingface.co/LeeSangHoon/WaveGen), pinned to an immutable revision and verified by checksum. Already verified models are reused on updates.
@@ -41,7 +43,7 @@ The first request may need to load a model. Loaded models remain in memory for l
 | Keep working | Searchable recording history, text/settings reuse, draft persistence, cancellation, and recovery after interrupted connections |
 | Choose the interface | English by default; 한국어, 简体中文, and 日本語 also available |
 
-Three licensed CMU ARCTIC reference profiles are included. The public package contains no private user recordings or generation history. There is no processed-character candidate gallery.
+The two new voices are **Iris** (US English) and **Cairn** (Scottish English). Both use recordings from CMU ARCTIC. See their [reference clips, selection method, and measured WER and speaker similarity](docs/VOICE_EVALUATION.md).
 
 ## Add a voice that works well
 
@@ -53,7 +55,7 @@ The editor can trim silence and adjust peak level. It does not automatically ver
 
 - **English speech input and English Reference Text.** Changing the interface language does not add another speech language.
 - **Windows NVIDIA CUDA runtime.** No supported CPU-only, AMD, Intel GPU, macOS, or Linux application build is provided in this beta.
-- The validated GPU has 16 GB VRAM. Memory use depends on loaded models, text length, and enhancement; no lower minimum has been established.
+- Studio has been tested on an RTX 5080 (16 GB) and an RTX 5090 (32 GB). Memory use depends on the models loaded, text length, and enhancement.
 - The native ONNX path is numerically validated but is not bit-identical to upstream PyTorch. It uses BF16 TTS inference with selected FP32 operations. A fixed seed is useful within the same setup, not a promise of identical audio across versions or devices.
 - Long text is generated in sections. Pronunciation, pacing, voice similarity, and edit seams can vary. Target duration can affect pauses and articulation.
 - Enhancement is optional and may change breath, timbre, or other details. Compare with the original.

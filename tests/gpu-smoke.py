@@ -50,10 +50,11 @@ def main():
     version=json.loads((Path(__file__).resolve().parents[1]/'version.json').read_text())['version']
     assert initial['state']=='ready' and initial['version']==version and initial['generation_count']==0,'Use a fresh disposable test instance'
     library=request('/api/voices')
-    assert not library.get('warnings') and {v['name'] for v in library['voices']}=={'Mira','Rowan','Kai'}
-    assert len(library['voices'])==3 and all(not v.get('character_effect') and not v.get('builtin') for v in library['voices'])
+    starter_names = sorted(['Mira', 'Rowan', 'Kai', 'Cairn', 'Iris'])
+    assert not library.get('warnings') and sorted(v['name'] for v in library['voices']) == starter_names
+    assert all(not v.get('character_effect') and not v.get('builtin') for v in library['voices'])
     voice=next(v for v in library['voices'] if v['name']=='Mira')
-    report={'passed':False,'version':version,'voices':['Mira','Rowan','Kai'],'text':TEXT,'cases':[],
+    report={'passed':False,'version':version,'voices':starter_names,'text':TEXT,'cases':[],
             'subjective_listening_performed':False}
     for model in ['flash','vspec']:
         payload={'voice_id':voice['id'],'model_id':model,'text':TEXT,'seed':23,'speed':1,

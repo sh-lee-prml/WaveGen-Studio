@@ -11,7 +11,7 @@ Running a release requires no Python. Building the C++ application also does not
 | `native/` | Windows server/entry point, resident TTS engines, GPU helpers, audio editing, and RE-USE integration |
 | `web/` | Plain HTML, CSS, and JavaScript interface; no npm build or CDN dependency |
 | `third_party/headers/` | Pinned HTTP/JSON headers and notices |
-| `presets/` | Three public CMU reference profiles, fictional portraits, provenance, and licenses |
+| `presets/` | Public voice profiles, recordings, artwork, provenance, and licenses |
 | `scripts/` | Verified dependency bootstrap, build, installation, and explicit update scripts |
 | `tools/export/` | Developer model-conversion sources, where included; not runtime dependencies |
 | `version.json` | Machine version and display version used by the public build |
@@ -65,3 +65,11 @@ Before publishing a regenerated pack, document source revisions, checkpoint/expo
 ## Updating a release
 
 Change `version.json`, rebuild, validate, and prepare release assets/manifests under the same version. Users update explicitly while the app is closed; preserve `data/`. See [Updating](UPDATING.md). Model/runtime changes must be reflected in their assets and checksums rather than silently replacing an existing download under the same identity.
+
+For an app-only release, use a fresh output directory and the manifest downloaded from the previous official GitHub release. Compare the manifest SHA-256 against GitHub's release asset digest before packaging.
+
+```powershell
+python scripts/package-release.py --source-package build/app --app-dir build/app --output-dir release --packs app --reuse-components-from previous/manifest.json
+```
+
+Publish the new application ZIP, `manifest.json`, and `SHA256SUMS.txt`. The manifest retains the pinned archives, hashes, and download URLs of the existing runtime and models. The installer uses `model_pack_version` to locate their original entry in the verified Hugging Face configuration.

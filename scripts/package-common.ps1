@@ -114,7 +114,9 @@ function Resolve-ModelPackages {
     if ((Get-Item -LiteralPath $configuration).Length -gt 4MB) { throw 'Model configuration exceeds its size limit.' }
     $document=Get-Content -Raw -LiteralPath $configuration|ConvertFrom-Json
     if (!$document.PSObject.Properties['wavegen_studio'] -or $document.wavegen_studio.schema_version -ne 1) { throw 'Unsupported Hugging Face Studio model configuration schema.' }
-    $releaseProperty=$document.wavegen_studio.releases.PSObject.Properties[$Manifest.version]
+    $modelVersion = $Manifest.version
+    if ($Manifest.PSObject.Properties['model_pack_version']) { $modelVersion = $Manifest.model_pack_version }
+    $releaseProperty=$document.wavegen_studio.releases.PSObject.Properties[$modelVersion]
     if (!$releaseProperty) { throw 'The Hugging Face model configuration does not contain this Studio release.' }
     $configured=@{}
     foreach ($asset in @($releaseProperty.Value.assets)) {

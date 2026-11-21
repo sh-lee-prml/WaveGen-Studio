@@ -2,13 +2,13 @@
 
 [English](INSTALL.md) · [README](../README_KO.md) · [업데이트](UPDATING_KO.md)
 
-Windows x64와 NVIDIA GPU·호환 드라이버가 필요합니다. 현재 검증한 환경은 **RTX 5080 16GB**이며 다른 GPU와 최소 VRAM은 확정하지 않았습니다. **실행에 Python·Node.js·Visual Studio·CUDA Toolkit은 필요하지 않습니다.** 모델·런타임과 다운로드 캐시·백업을 위해 수 GB 이상의 여유 공간을 준비하세요.
+Windows x64와 NVIDIA GPU·호환 드라이버가 필요합니다. 0.2는 RTX 5090(32GB), 0.1은 RTX 5080(16GB)에서 검증했습니다. 최소 VRAM은 아직 확인되지 않았습니다. **실행에 Python·Node.js·Visual Studio·CUDA Toolkit은 필요하지 않습니다.** 모델·런타임과 다운로드 캐시·백업을 위한 여유 공간을 준비하세요.
 
 [Microsoft Visual C++ x64 Redistributable](https://aka.ms/vc14/vc_redist.x64.exe)이 없다면 Microsoft에서 설치하세요. [공식 안내](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)를 참고하세요. WaveGen 모델의 **CC BY-NC 4.0 비상업 조건**은 [라이선스 안내](LICENSING.md)에 정리했습니다.
 
 ## 처음 설치
 
-1. **[Windows 앱 ZIP](https://github.com/sh-lee-prml/WaveGen-Studio/releases/download/v0.1.0-beta.1/WaveGen-Studio-0.1.0-beta.1-app-windows-x64.zip)**을 받아 `C:\Apps\WaveGen Studio`처럼 쓰기 가능한 폴더에 압축을 풉니다. [Releases](https://github.com/sh-lee-prml/WaveGen-Studio/releases)의 Source code 압축 파일은 개발자용이며 일반 사용에는 필요하지 않습니다.
+1. **[Windows 앱 ZIP](https://github.com/sh-lee-prml/WaveGen-Studio/releases/download/v0.2.0-beta.1/WaveGen-Studio-0.2.0-beta.1-app-windows-x64.zip)**을 받아 `C:\Apps\WaveGen Studio`처럼 쓰기 가능한 폴더에 압축을 풉니다. [Releases](https://github.com/sh-lee-prml/WaveGen-Studio/releases)의 Source code 압축 파일은 개발자용이며 일반 사용에는 필요하지 않습니다.
 2. Microsoft 런타임이 없다면 위 공식 링크로 설치하고 NVIDIA 드라이버를 확인합니다.
 3. **Install-WaveGen-Studio.cmd**를 더블클릭합니다. 같은 폴더에 베타를 포함한 최신 공개 배포의 런타임·Flash·V-Spec·RE-USE를 받아 SHA-256을 확인합니다. 설치 후 자동 실행하지 않습니다.
 4. **Launch-WaveGen-Studio.cmd**를 더블클릭하고 기본 목소리와 짧은 영어 문장으로 시험합니다.
@@ -39,7 +39,7 @@ CMD는 같은 폴더에 설치합니다. `scripts/install.ps1`을 직접 호출�
 
 Microsoft 공식 서명 설치 프로그램 실행을 명시적으로 허용하려면 `-InstallVcRuntime`을 추가합니다. Microsoft 설치 과정에서 시스템 권한을 요청할 수 있습니다. Studio가 GPU 드라이버를 설치하거나 다른 앱의 Microsoft DLL을 복사하지는 않습니다.
 
-특정 배포를 고정하려면 `-ReleaseTag 'v0.1.0-beta.1'`처럼 배포 페이지의 정확한 태그를 지정하세요. `manifest.json`과 SHA-256은 파일 무결성을 확인하며 디지털 서명은 아닙니다. 공식 저장소·배포에서 파일을 받으세요. 고급 설치의 `-ManifestPath`와 `-CacheDirectory`는 해당 목록의 파일을 미리 받은 경우 사용할 수 있습니다.
+특정 배포를 고정하려면 `-ReleaseTag 'v0.2.0-beta.1'`처럼 배포 페이지의 정확한 태그를 지정하세요. `manifest.json`과 SHA-256은 파일 무결성을 확인하며 디지털 서명은 아닙니다. 공식 저장소·배포에서 파일을 받으세요. 고급 설치의 `-ManifestPath`와 `-CacheDirectory`는 해당 목록의 파일을 미리 받은 경우 사용할 수 있습니다.
 
 DLL 누락은 Microsoft 런타임과 같은 버전의 앱 런타임 팩을, 모델 누락은 같은 설치 위치의 모델 팩을 확인하세요. 해시 검사가 실패하면 건너뛰지 말고 공식 배포로 다시 시도하세요. GPU 메모리가 부족하면 앱을 종료하고 다른 GPU 앱을 닫은 뒤 짧은 문장으로 확인하세요. 자세한 문제 해결은 [영어 설치 안내](INSTALL.md#if-it-does-not-start)에 있습니다.
 

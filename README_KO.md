@@ -1,4 +1,4 @@
-# WaveGen Studio · 0.1 (beta)
+# WaveGen Studio · 0.2 (beta)
 
 [English](README.md) · [설치](docs/INSTALL_KO.md) · [사용법](docs/USER_GUIDE_KO.md) · [개발·빌드](docs/BUILDING.md) · [목소리 기여](docs/VOICE_CONTRIBUTIONS_KO.md)
 
@@ -8,17 +8,21 @@
 
 [WaveGen](https://github.com/sh-lee-prml/WaveGen)으로 영어 음성을 만들고 편집하는 Windows 로컬 앱입니다. 목소리를 고르고 문장을 입력하면 작성 영역 옆에서 결과를 바로 들어볼 수 있습니다. 네이티브 C++ EXE와 브라우저 화면으로 실행하며, **사용할 때 Python을 설치할 필요가 없습니다.**
 
-첫 공개 베타 버전은 `0.1.0-beta.1`입니다. 현재 검증 환경은 **Windows x64, NVIDIA RTX 5080 16GB**입니다. 다른 GPU의 동작은 아직 검증하지 않았습니다. WaveGen 모델은 **CC BY-NC 4.0 비상업용 조건**이며, Studio 코드의 라이선스와 별개입니다.
+현재 Windows x64 베타 버전은 **0.2.0-beta.1**입니다. 목소리 다섯 개와 녹음 보관함, 화이트·블랙 테마를 제공합니다.
+
+![화이트 테마에서 목소리를 선택하고 대본으로 생성한 음성을 재생하는 화면](docs/images/studio-white.jpg)
+
+[블랙 테마 화면 보기](docs/images/studio-black.jpg)
 
 ## 시작하기
 
-**[Windows 베타 다운로드](https://github.com/sh-lee-prml/WaveGen-Studio/releases/download/v0.1.0-beta.1/WaveGen-Studio-0.1.0-beta.1-app-windows-x64.zip)** · [설치 안내](docs/INSTALL_KO.md)
+**[Windows 베타 다운로드](https://github.com/sh-lee-prml/WaveGen-Studio/releases/download/v0.2.0-beta.1/WaveGen-Studio-0.2.0-beta.1-app-windows-x64.zip)** · [설치 안내](docs/INSTALL_KO.md)
 
 일반 사용자는 앱 ZIP을 받으면 됩니다. GitHub의 Source code ZIP은 개발자용입니다.
 
 1. 쓰기 가능한 폴더에 압축을 풀고 **Install-WaveGen-Studio.cmd**를 실행해 검증된 런타임·모델을 받습니다. NVIDIA 드라이버와 Microsoft 런타임은 [설치 안내](docs/INSTALL_KO.md)를 참고하세요.
 2. **Launch-WaveGen-Studio.cmd**를 실행합니다. DLL과 나머지 폴더도 함께 보관하세요.
-3. **Mira, Rowan, Kai** 중 하나를 고르고 짧은 영어 문장을 입력한 뒤 **음성 만들기**를 누릅니다. 넓은 화면에서는 작성 영역 오른쪽, 작은 화면에서는 생성 버튼 바로 아래에 결과가 표시됩니다.
+3. **Mira, Rowan, Kai, Iris, Cairn** 중 하나를 골라 미리 들어보세요. 짧은 영어 문장을 직접 입력하거나 **예시 대본 넣기**를 선택해 생성할 수 있습니다. 이전 결과는 **녹음 보관함**에서 다시 들을 수 있습니다.
 4. **내 목소리 추가**로 참조 녹음과 정확한 대사를 저장할 수 있습니다.
 
 앱과 런타임은 GitHub Releases에서, Flash·V-Spec·RE-USE 네이티브 모델 팩은 원래 [LeeSangHoon/WaveGen Hugging Face 저장소](https://huggingface.co/LeeSangHoon/WaveGen)에서 받습니다. 변경되지 않는 리비전에 고정하고 체크섬을 확인하며, 업데이트할 때 이미 검증한 모델은 재사용합니다.
@@ -37,7 +41,7 @@
 | 작업 이어가기 | 기록 검색, 문장·설정 불러오기, 초안 자동 보관, 중지, 연결 중단 후 작업 확인 |
 | 화면 언어 | English 기본값, 한국어·简体中文·日本語 지원 |
 
-허가된 CMU ARCTIC 참조 프로필 3종을 제공합니다. 공개 패키지에는 개인 녹음이나 생성 기록을 포함하지 않습니다. 효과를 입힌 캐릭터 후보 갤러리는 제공하지 않습니다.
+새 목소리 **Iris**는 미국 영어, **Cairn**은 스코틀랜드 영어 녹음을 사용합니다. 두 녹음 모두 CMU ARCTIC에서 가져왔습니다. [참조 음성, 선별 방법과 WER·화자 유사도 측정 결과](docs/VOICE_EVALUATION.md)
 
 ## 좋은 참조 목소리 등록하기
 
@@ -49,7 +53,7 @@
 
 - 음성 생성 문장과 Reference Text는 **영어**를 지원합니다. 화면 언어를 바꿔도 음성 지원 언어는 바뀌지 않습니다.
 - 현재 **Windows NVIDIA CUDA** 환경을 대상으로 합니다. CPU 전용·AMD·Intel GPU·macOS·Linux 앱은 지원하지 않습니다.
-- 검증한 GPU는 16GB입니다. 불러온 모델과 문장 길이, 향상 기능에 따라 메모리 사용량이 달라지며 더 낮은 최소 사양은 확정하지 않았습니다.
+- RTX 5080(16GB)과 RTX 5090(32GB)에서 검증했습니다. 메모리 사용량은 불러온 모델, 문장 길이, 음성 향상 기능에 따라 달라집니다.
 - 네이티브 ONNX 계산은 검증했지만 원본 PyTorch와 비트 단위로 같지는 않습니다. BF16 TTS와 일부 FP32 연산을 사용합니다. 같은 시드는 같은 환경의 재현에 도움이 되지만 버전·장치 간 동일한 오디오를 보장하지 않습니다.
 - 긴 글은 나누어 생성합니다. 발음·속도·목소리 유사도와 구간 연결이 달라질 수 있습니다. 목표 길이는 쉼과 발음에 영향을 줄 수 있습니다.
 - 음성 향상은 선택 사항이며 숨소리나 음색도 바꿀 수 있습니다. 원본과 비교하세요.

@@ -18,10 +18,10 @@ The updater requires the application to be closed, keeps `data/` and unmanaged f
 ## Select the version and models
 
 ```powershell
-& .\scripts\update.ps1 -InstallDirectory 'C:\Apps\WaveGen Studio' -ReleaseTag 'v0.1.0-beta.1' -Models flash,vspec,reuse
+& .\scripts\update.ps1 -InstallDirectory 'C:\Apps\WaveGen Studio' -ReleaseTag 'v0.2.0-beta.1' -Models flash,vspec,reuse
 ```
 
-Without a tag the script selects the latest published release, including betas. The model default is all three; pass your desired selection explicitly when maintaining a smaller installation. The install script can also add missing model packs to an existing destination. `-ManifestPath` and `-CacheDirectory` support a local manifest/cache; `-InstallVcRuntime` explicitly opts into running Microsoft's official runtime installer if needed.
+Without a tag the script selects the latest published release, including betas. By default, the 0.2 updater keeps the models you already installed. To choose specific packs, pass `-Models`. If your 0.1 installation has only some packs, extract the new app ZIP to a separate folder. Run the new folder's update script with `-InstallDirectory` pointing to the existing installation and omit `-Models` to keep your selection. The install script can also add missing model packs to an existing destination. `-ManifestPath` and `-CacheDirectory` support a local manifest/cache. `-InstallVcRuntime` opts into running Microsoft's official runtime installer if needed.
 
 An older unmanaged installation without `.studio-install.json` cannot be updated in place by this script. Install the public release into a new folder, keep the old installation and its data backup, and migrate a copy of `data/` only after both apps are closed and the release's data compatibility is confirmed. Do not use the installer to overwrite an older private development folder.
 

@@ -104,6 +104,25 @@ def assemble_manifest(version: dict, assets: list[dict], model_config: dict | No
             'model_config': model_config, 'assets': output}
 
 
+def assemble_app_update(version: dict, app: dict, previous: dict) -> dict:
+    """Publish just the new application; retain pinned URLs and hashes for binary dependencies."""
+    if previous.get('repository') != version['repository'] or previous.get('schema_version') != 1:
+        raise ValueError('Expected a Studio release manifest from the same repository')
+    if previous.get('version') == version['version'] or app.get('id') != 'app':
+        raise ValueError('An application update needs a new version and a new app record')
+    if app.get('name') != f"WaveGen-Studio-{version['version']}-app-windows-x64.zip":
+        raise ValueError('New application archive does not match version.json')
+    assets = previous['assets']
+    if len(assets) != len(PACKS) or {a['id'] for a in assets} != set(PACKS):
+        raise ValueError('Incomplete source release manifest')
+    return {
+        'schema_version': 1, **version, 'tag': 'v' + version['version'],
+        'model_config': validate_model_config(previous['model_config']),
+        'model_pack_version': previous.get('model_pack_version', previous['version']),
+        'assets': [app if row['id'] == 'app' else row for row in assets],
+    }
+
+
 def sha(path: Path) -> str:
     with path.open('rb') as stream:
         return hashlib.file_digest(stream, 'sha256').hexdigest()
@@ -201,6 +220,7 @@ def main():
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--packs', nargs='+', choices=PACKS, default=list(PACKS))
     parser.add_argument('--model-config', type=Path, help='JSON descriptor pinning the original HF repository config; a same-version existing manifest is reused when omitted')
+    parser.add_argument('--reuse-components-from', type=Path, help='Previous published manifest for an app-only release; preserves runtime and model archives, URLs, and hashes')
     args = parser.parse_args()
     args.output_dir = args.output_dir.resolve()
     assert args.output_dir != args.source_package.resolve() and not args.output_dir.is_relative_to(args.source_package.resolve())
@@ -210,7 +230,12 @@ def main():
     assert re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9.]+)?',version['version'])
     previous_path = args.output_dir/'manifest.json'
     previous = json.loads(previous_path.read_text(encoding='utf-8')) if previous_path.exists() else None
-    args.model_config = resolve_model_config(args.model_config, previous, version)
+    base_manifest = None
+    if args.reuse_components_from:
+        if args.packs != ['app'] or args.model_config:
+            parser.error('--reuse-components-from requires --packs app and uses the previous model configuration')
+        base_manifest = json.loads(args.reuse_components_from.read_text(encoding='utf-8-sig'))
+    args.model_config = validate_model_config(base_manifest['model_config']) if base_manifest else resolve_model_config(args.model_config, previous, version)
     available = set(args.packs) | {name for name in PACKS if (args.output_dir/(name+'-asset.json')).exists()}
     if available == set(PACKS) and args.model_config is None:
         parser.error('Final release assembly requires --model-config descriptor.json; no archives were changed')
@@ -244,9 +269,11 @@ def main():
         else:
             for name in ['WaveGen Studio.exe','version.json','build-info.json']:
                 entries[name] = args.app_dir/name
-            for folder_name in ['studio_web','presets']:
-                for path in (args.app_dir/folder_name).rglob('*'):
-                    if path.is_file():entries[path.relative_to(args.app_dir).as_posix()] = path
+            for source_folder, installed_folder in [('web', 'studio_web'), ('presets', 'presets')]:
+                folder = REPO/source_folder
+                for path in folder.rglob('*'):
+                    if path.is_file():
+                        entries[installed_folder+'/'+path.relative_to(folder).as_posix()] = path
             for name in ['LICENSE','THIRD_PARTY_NOTICES.md','README.md','README_KO.md','CONTRIBUTING.md']:
                 entries[name] = REPO/name
             for name in ['Install-WaveGen-Studio.cmd','Update-WaveGen-Studio.cmd','Launch-WaveGen-Studio.cmd',
@@ -257,8 +284,12 @@ def main():
                     if path.is_file():entries[path.relative_to(REPO).as_posix()] = path
         archive(pack_id,entries,args,version)
     assets = [json.loads((args.output_dir/(name+'-asset.json')).read_text()) for name in PACKS if (args.output_dir/(name+'-asset.json')).exists()]
-    if len(assets)==5:
-        manifest = assemble_manifest(version, assets, args.model_config)
+    if base_manifest or len(assets)==5:
+        if base_manifest:
+            app = json.loads((args.output_dir/'app-asset.json').read_text())
+            manifest = assemble_app_update(version, app, base_manifest)
+        else:
+            manifest = assemble_manifest(version, assets, args.model_config)
         # Refresh only metadata for retained packs. Their archives are not opened
         # or rewritten when --packs app refreshes the small application bundle.
         assets = manifest['assets']

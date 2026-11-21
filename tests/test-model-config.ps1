@@ -36,6 +36,11 @@ Fails {Resolve-ModelPackages -Manifest $bad -PendingAssets $assets -CacheDirecto
 $script:corrupt=$false
 $bad=Clone $manifest;$bad.version='9.9.9'
 Fails {Resolve-ModelPackages -Manifest $bad -PendingAssets $assets -CacheDirectory $root} 'Missing release version was accepted'
+$appUpdate = Clone $manifest
+$appUpdate.version = '0.2.0-beta.1'
+$appUpdate | Add-Member -NotePropertyName model_pack_version -NotePropertyValue $manifest.version
+$updated = @(Resolve-ModelPackages -Manifest $appUpdate -PendingAssets $assets -CacheDirectory $root -Offline)
+Check ($updated[0].url -ceq $resolved[0].url) 'App update could not reuse the original verified model release'
 foreach($field in @('sha256','size','files','path')){
     $badConfig=Clone $config
     switch($field){

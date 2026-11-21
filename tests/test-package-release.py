@@ -57,6 +57,18 @@ class ReleasePackaging(unittest.TestCase):
         with self.assertRaises(ValueError):
             package.assemble_manifest(VERSION, bad, DESCRIPTOR)
 
+    def test_new_application_reuses_exact_binary_components(self):
+        previous = package.assemble_manifest(VERSION, assets(), DESCRIPTOR)
+        version = {**VERSION, 'version': '0.2.0-beta.1', 'display_version': '0.2 (beta)'}
+        app = {**previous['assets'][0], 'name': 'WaveGen-Studio-0.2.0-beta.1-app-windows-x64.zip'}
+        updated = package.assemble_app_update(version, app, previous)
+        self.assertEqual(updated['assets'][1:], previous['assets'][1:])
+        self.assertEqual(updated['model_config'], previous['model_config'])
+        self.assertEqual(updated['model_pack_version'], previous['version'])
+        self.assertEqual(updated['version'], version['version'])
+        with self.assertRaises(ValueError):
+            package.assemble_app_update(version, previous['assets'][0], previous)
+
     def test_invalid_or_duplicate_component_rejected(self):
         bad = assets();bad[4] = bad[3]
         with self.assertRaises(ValueError):

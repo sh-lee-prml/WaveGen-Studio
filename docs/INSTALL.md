@@ -4,7 +4,7 @@
 
 ## Requirements
 
-- Windows x64 and an NVIDIA GPU with a compatible installed NVIDIA driver. The qualified configuration for this beta is **RTX 5080, 16 GB VRAM**; other GPUs and a lower VRAM minimum have not been established.
+- Windows x64 and an NVIDIA GPU with a compatible driver. The 0.2 release was tested on an RTX 5090 (32 GB), and 0.1 was tested on an RTX 5080 (16 GB). The minimum VRAM requirement is still unknown.
 - A modern browser for the local interface and Windows PowerShell for the installer.
 - The [Microsoft Visual C++ x64 Redistributable](https://aka.ms/vc14/vc_redist.x64.exe). Install it from Microsoft if it is missing; see [Microsoft's download guidance](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist).
 - Several GB of free space for the application, CUDA/cuDNN runtime, and model packs, plus space for download caches, backups, and your recordings.
@@ -15,7 +15,7 @@ WaveGen checkpoints are **CC BY-NC 4.0 (non-commercial)**. Read the [license map
 
 ## First installation
 
-1. **[Download the Windows app ZIP](https://github.com/sh-lee-prml/WaveGen-Studio/releases/download/v0.1.0-beta.1/WaveGen-Studio-0.1.0-beta.1-app-windows-x64.zip)**, or find the app ZIP on this project's [Releases page](https://github.com/sh-lee-prml/WaveGen-Studio/releases). Extract it to a writable folder such as `C:\Apps\WaveGen Studio`. GitHub's **Source code** archives are for developers and are not needed to run the app.
+1. **[Download the Windows app ZIP](https://github.com/sh-lee-prml/WaveGen-Studio/releases/download/v0.2.0-beta.1/WaveGen-Studio-0.2.0-beta.1-app-windows-x64.zip)**, or find the app ZIP on this project's [Releases page](https://github.com/sh-lee-prml/WaveGen-Studio/releases). Extract it to a writable folder such as `C:\Apps\WaveGen Studio`. GitHub's **Source code** archives are for developers and are not needed to run the app.
 2. Install the Microsoft runtime prerequisite above if it is missing, and ensure your NVIDIA driver is installed.
 3. Double-click **Install-WaveGen-Studio.cmd** in the extracted folder. It installs into that same folder, finds the latest published release including betas, verifies release asset SHA-256 checksums, and downloads the runtime, Flash, V-Spec, and RE-USE packs. It does not launch the app automatically.
 4. Double-click **Launch-WaveGen-Studio.cmd**. A local browser page opens. Choose a starter voice, type a short English sentence, and generate.
@@ -57,7 +57,7 @@ Microsoft's own installer may request system permissions. Studio does not bundle
 Use the exact tag shown on the release page to avoid selecting a newer release:
 
 ```powershell
-& .\scripts\install.ps1 -ReleaseTag 'v0.1.0-beta.1'
+& .\scripts\install.ps1 -ReleaseTag 'v0.2.0-beta.1'
 ```
 
 `manifest.json` lists the assets and their SHA-256 hashes. The installer checks downloaded bytes against that manifest. A checksum is an integrity check, not a digital signature or independent guarantee of the publisher's identity; obtain scripts and the manifest from the official repository/release.

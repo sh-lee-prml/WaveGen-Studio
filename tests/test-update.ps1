@@ -43,6 +43,11 @@ Apply $appOnly
 Check ((Get-Content -Raw (Join-Path $installation 'version.txt'))-eq'app-only update') 'App-only update failed when unchanged model/runtime archives were absent'
 Check ((Get-Content -Raw (Join-Path $installation 'model/test.bin'))-eq'model') 'App-only update changed the model'
 Check (!(Test-Path -LiteralPath (Join-Path $cache ('model-config-'+('f'*64)+'.json')))) 'Unchanged installed models unnecessarily downloaded a configuration'
+$appManifest = Join-Path $caseRoot 'app-update.json'
+$appOnly | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath $appManifest -Encoding utf8
+& (Join-Path $PSScriptRoot '../scripts/update.ps1') -InstallDirectory $installation -ManifestPath $appManifest -CacheDirectory $cache
+$installed = Get-Content -Raw (Join-Path $installation '.studio-install.json') | ConvertFrom-Json
+Check (@($installed.assets | Where-Object { $_.id -in @('vspec','reuse') }).Count -eq 0) 'A Flash-only update added an optional model'
 $snapshot=Get-FileDigest (Join-Path $installation 'first.txt')
 $bad=($two|ConvertTo-Json -Depth 20|ConvertFrom-Json);$bad.assets[0].sha256='0'*64;$bad.assets[0].files.'first.txt'='0'*64
 Must-Fail {Apply $bad} 'Invalid archive checksum was accepted'

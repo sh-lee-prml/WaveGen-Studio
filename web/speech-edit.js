@@ -155,6 +155,7 @@
     $("edit-select-all").addEventListener("click", () => select(0, state.wave.duration));
     $("edit-play-selection").addEventListener("click", playSelection);
     $("edit-stop").addEventListener("click", stop);
+    window.addEventListener?.("studio-theme-change", drawWave);
     $("edit-zoom").addEventListener("change", drawWave);
     for (const id of ["edit-seed", "edit-voice", "edit-match-duration"]) $(id).addEventListener("input", schedulePlan);
     $("edit-model").addEventListener("change", () => {
@@ -296,9 +297,10 @@
     const ctx = canvas.getContext("2d"); ctx.scale(ratio, ratio); ctx.clearRect(0,0,width,height);
     const envelope = peaks(state.wave.samples, width);
     let maximum = .05; for (const value of envelope) maximum = Math.max(maximum, Math.abs(value));
-    ctx.strokeStyle = "#91b5a6"; ctx.lineWidth = 1; ctx.beginPath();
+    const dark = document.documentElement.getAttribute?.("data-theme") === "dark";
+    ctx.strokeStyle = dark ? "#b4bed0" : "#586579"; ctx.lineWidth = 1; ctx.beginPath();
     for (let x=0; x<width; x++) { ctx.moveTo(x+.5, height/2-envelope[x*2]*64/maximum); ctx.lineTo(x+.5, height/2-envelope[x*2+1]*64/maximum); } ctx.stroke();
-    ctx.strokeStyle = "#cad9d0"; ctx.beginPath(); ctx.moveTo(0,height/2); ctx.lineTo(width,height/2); ctx.stroke();
+    ctx.strokeStyle = dark ? "#545c69" : "#abaeb4"; ctx.beginPath(); ctx.moveTo(0,height/2); ctx.lineTo(width,height/2); ctx.stroke();
     const tickCount = Math.max(4, Math.round(width / 120));
     $("edit-wave-ticks").innerHTML = Array.from({length:tickCount+1},(_,i)=>`<span style="left:${i/tickCount*100}%">${(i/tickCount*state.wave.duration).toFixed(1)}s</span>`).join("");
     paintSelection(); updatePlayhead();
