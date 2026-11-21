@@ -30,7 +30,9 @@ cd WaveGen-Studio
 & .\scripts\build.ps1
 ```
 
-The bootstrap script downloads the pinned **LLVM-MinGW 20261104 UCRT x86_64** toolchain and **ONNX Runtime 1.31.1 CUDA 12** native SDK and verifies SHA-256. It does not install a GPU driver or system-wide toolchain. Build output is `build/app/WaveGen Studio.exe`, together with the web interface and public presets.
+The bootstrap script verifies the SHA-256 of **LLVM-MinGW 20261104 UCRT x86_64** and Microsoft's **ONNX Runtime 1.31.1** Windows NuGet package. It extracts the C/C++ headers and x64 import library used by Studio. These files match the original CUDA 12 SDK byte for byte. The package's core DLL is used only to run the CPU storage tests. The release installer supplies the CUDA 12 runtime for inference. [Microsoft NuGet package](https://www.nuget.org/packages/Microsoft.ML.OnnxRuntime.Gpu.Windows/1.31.1)
+
+Build output is `build/app/WaveGen Studio.exe`, together with the web interface and public presets.
 
 The build does not contain all runtime DLLs or exported model weights. Install the matching runtime/model packs before launching it. For a development replacement, copy the rebuilt EXE/web assets into a separate complete test installation while that application is closed; keep personal `data/` out of development and release staging.
 

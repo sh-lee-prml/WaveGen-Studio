@@ -6,7 +6,7 @@ param(
 $ErrorActionPreference = 'Stop'
 $repoRoot = Split-Path -Parent $PSScriptRoot
 if (!$ToolchainDirectory) { $ToolchainDirectory = Join-Path $repoRoot 'third_party/sdk/llvm-mingw-20261104-ucrt-x86_64' }
-if (!$OnnxRuntimeDirectory) { $OnnxRuntimeDirectory = Join-Path $repoRoot 'third_party/sdk/onnxruntime-win-x64-gpu_cuda12-1.31.1' }
+if (!$OnnxRuntimeDirectory) { $OnnxRuntimeDirectory = Join-Path $repoRoot 'third_party/sdk/onnxruntime-build-1.31.1' }
 if (!$OutputDirectory) { $OutputDirectory = Join-Path $repoRoot 'build/app' }
 $compiler = Join-Path $ToolchainDirectory 'bin/clang++.exe'
 if (!(Test-Path -LiteralPath $compiler)) { throw 'Compiler missing. Run scripts/bootstrap-build.ps1 or pass -ToolchainDirectory.' }
